@@ -36,3 +36,6 @@ docs/ui-build/evidence/_crop*.png
 
 # GitHub Actions 不参与部署（Render 有自己的构建流程），且推送需要额外 token 权限
 .github/
+
+# 含真实 API key，绝不入库（仓库是公开的）
+转发给同事.md
