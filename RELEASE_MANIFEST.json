@@ -1,0 +1,39 @@
+{
+  "name": "筑安智培 SiteSaha AI",
+  "version": "16.0.0",
+  "release_type": "online-deployed",
+  "description": "面向建筑一线新员工的AI安全培训智能体",
+  "runtime": {
+    "python": ">=3.10",
+    "web_framework": "Python standard library",
+    "database": "SQLite FTS5"
+  },
+  "deployment_targets": [
+    "Docker",
+    "Render",
+    "Railway",
+    "Google Cloud Run",
+    "Linux VPS"
+  ],
+  "included": [
+    "application source",
+    "standardized knowledge text",
+    "tests",
+    "deployment manifests",
+    "third-party notices and licenses"
+  ],
+  "excluded": [
+    ".env",
+    ".venv",
+    "SQLite database",
+    "raw downloaded attachments",
+    "uploaded images and documents",
+    "Python cache files"
+  ],
+  "notes": [
+    "No API key is included.",
+    "DeepSeek and vision provider keys must be configured as deployment secrets.",
+    "Raw standards should be re-downloaded from official sources when needed.",
+    "OpenStd entries contain public metadata and official links only."
+  ]
+}

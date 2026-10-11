@@ -1,0 +1,351 @@
+{
+ "stats": {
+  "documents": 42,
+  "chunks": 3092
+ },
+ "model": {
+  "available": false,
+  "detail": "未配置模型服务地址，当前使用检索摘要",
+  "model": "deepseek-chat"
+ },
+ "documents": [
+  {
+   "id": 38,
+   "title": "GB 4053.1-2009 固定式钢梯及平台安全要求 第1部分：钢直梯",
+   "source": "openstd\\24_GB 4053.1-2009.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 39,
+   "title": "GB 4053.2-2009 固定式钢梯及平台安全要求 第2部分：钢斜梯",
+   "source": "openstd\\25_GB 4053.2-2009.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 40,
+   "title": "GB 4053.3-2009 固定式钢梯及平台安全要求 第3部分：工业防护栏杆及钢平台",
+   "source": "openstd\\26_GB 4053.3-2009.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 42,
+   "title": "GB/T 13861-2022 生产过程危险和有害因素分类与代码",
+   "source": "openstd\\28_GB_T 13861-2022.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 41,
+   "title": "GB/T 25295-2010 电气设备安全设计导则",
+   "source": "openstd\\27_GB_T 25295-2010.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 20,
+   "title": "GB 12523-2025 建筑施工噪声排放标准",
+   "source": "openstd\\06_GB 12523-2025.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 26,
+   "title": "GB 2626-2019 呼吸防护 自吸过滤式防颗粒物呼吸器",
+   "source": "openstd\\12_GB 2626-2019.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 15,
+   "title": "GB 2811-2019 头部防护 安全帽",
+   "source": "openstd\\01_GB 2811-2019.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 25,
+   "title": "GB 2890-2022 呼吸防护 自吸过滤式防毒面具",
+   "source": "openstd\\11_GB 2890-2022.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 18,
+   "title": "GB 39800.1-2020 个体防护装备配备规范 第1部分：总则",
+   "source": "openstd\\04_GB 39800.1-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 28,
+   "title": "GB 39800.2-2020 个体防护装备配备规范 第2部分：石油、化工、天然气",
+   "source": "openstd\\14_GB 39800.2-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 29,
+   "title": "GB 39800.3-2020 个体防护装备配备规范 第3部分：冶金、有色",
+   "source": "openstd\\15_GB 39800.3-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 19,
+   "title": "GB 45943-2025 建筑施工机械与设备 通用安全要求",
+   "source": "openstd\\05_GB 45943-2025.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 16,
+   "title": "GB 6095-2021 坠落防护 安全带",
+   "source": "openstd\\02_GB 6095-2021.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 23,
+   "title": "GB 6722-2014 爆破安全规程",
+   "source": "openstd\\09_GB 6722-2014.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 30,
+   "title": "GB/T 12903-2025 个体防护装备术语",
+   "source": "openstd\\16_GB_T 12903-2025.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 17,
+   "title": "GB/T 13869-2017 用电安全导则",
+   "source": "openstd\\03_GB_T 13869-2017.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 34,
+   "title": "GB/T 15706-2012 机械安全 设计通则 风险评估与风险减小",
+   "source": "openstd\\20_GB_T 15706-2012.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 31,
+   "title": "GB/T 2893.1-2013 图形符号 安全色和安全标志 第1部分：安全标志和安全标记的设计原则",
+   "source": "openstd\\17_GB_T 2893.1-2013.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 32,
+   "title": "GB/T 2893.2-2020 图形符号 安全色和安全标志 第2部分：产品安全标签的设计原则",
+   "source": "openstd\\18_GB_T 2893.2-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 33,
+   "title": "GB/T 2893.5-2020 图形符号 安全色和安全标志 第5部分：安全标志使用原则与要求",
+   "source": "openstd\\19_GB_T 2893.5-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 37,
+   "title": "GB/T 29086-2012 钢丝绳 安全 使用和维护",
+   "source": "openstd\\23_GB_T 29086-2012.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 24,
+   "title": "GB/T 29639-2020 生产经营单位生产安全事故应急预案编制导则",
+   "source": "openstd\\10_GB_T 29639-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 21,
+   "title": "GB/T 3787-2017 手持式电动工具的管理、使用、检查和维修安全技术规程",
+   "source": "openstd\\07_GB_T 3787-2017.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 35,
+   "title": "GB/T 4208-2017 外壳防护等级（IP代码）",
+   "source": "openstd\\21_GB_T 4208-2017.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 22,
+   "title": "GB/T 5972-2023 起重机 钢丝绳 保养、维护、检验和报废",
+   "source": "openstd\\08_GB_T 5972-2023.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 36,
+   "title": "GB/T 6067.1-2010 起重机械安全规程 第1部分：总则",
+   "source": "openstd\\22_GB_T 6067.1-2010.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 27,
+   "title": "GB/T 6096-2020 坠落防护 安全带系统性能测试方法",
+   "source": "openstd\\13_GB_T 6096-2020.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 14,
+   "title": "建筑施工易发事故防治安全标准 JGJT429-2017",
+   "source": "jncc\\09_jgjt429_2017.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 937
+  },
+  {
+   "id": 1,
+   "title": "JGJ 59-2011 建筑施工安全检查标准（演示摘要）",
+   "source": "01_jgj59_2011_demo.md",
+   "version": "",
+   "category": "演示摘要",
+   "chunk_count": 25
+  },
+  {
+   "id": 10,
+   "title": "企业职工伤亡事故分类标准 GB6441—86",
+   "source": "jncc\\05_gb6441_86.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 2
+  },
+  {
+   "id": 12,
+   "title": "建筑工程绿色施工评价标准 GBT 50640-2010",
+   "source": "jncc\\07_gbt50640_2010.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 1
+  },
+  {
+   "id": 9,
+   "title": "建筑施工作业劳动防护用品配备及使用标准 JGJ184-2009",
+   "source": "jncc\\04_jgj184_2009.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 1
+  },
+  {
+   "id": 11,
+   "title": "建筑施工升降设备设施检验标准 JGJ305-2013",
+   "source": "jncc\\06_jgj305_2013.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 24
+  },
+  {
+   "id": 6,
+   "title": "建筑施工安全检查标准 JGJ59-2011",
+   "source": "jncc\\01_jgj59_2011_full.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 332
+  },
+  {
+   "id": 7,
+   "title": "建筑施工现场环境与卫生标准 JGJ146-2004",
+   "source": "jncc\\02_jgj146_2004.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 1
+  },
+  {
+   "id": 13,
+   "title": "建筑施工脚手架安全技术统一标准",
+   "source": "jncc\\08_scaffold_standard.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 1672
+  },
+  {
+   "id": 4,
+   "title": "新工人安全培训速查",
+   "source": "04_new_worker_training.md",
+   "version": "",
+   "category": "演示摘要",
+   "chunk_count": 4
+  },
+  {
+   "id": 5,
+   "title": "新工人常见操作安全规则",
+   "source": "05_operation_safety.md",
+   "version": "",
+   "category": "演示摘要",
+   "chunk_count": 6
+  },
+  {
+   "id": 8,
+   "title": "施工企业安全生产评价标准 JGJ77-2010",
+   "source": "jncc\\03_jgj77_2010.md",
+   "version": "",
+   "category": "公开标准",
+   "chunk_count": 1
+  },
+  {
+   "id": 3,
+   "title": "施工现场应急处置摘要",
+   "source": "03_emergency_response.md",
+   "version": "",
+   "category": "演示摘要",
+   "chunk_count": 15
+  },
+  {
+   "id": 2,
+   "title": "现场工友安全问答摘要",
+   "source": "02_field_quick_rules.md",
+   "version": "",
+   "category": "演示摘要",
+   "chunk_count": 15
+  }
+ ],
+ "vision_configured": false,
+ "asr_configured": false
+}

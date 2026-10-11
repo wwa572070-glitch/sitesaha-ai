@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: sitesaha-ai
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: SITESHAHA_LLM_MODE
+        value: "on"
+      - key: SITESHAHA_LLM_BASE_URL
+        value: "https://api.deepseek.com/v1"
+      - key: SITESHAHA_LLM_MODEL
+        value: "deepseek-chat"
+      - key: SITESHAHA_LLM_API_STYLE
+        value: "chat"
+      - key: SITESHAHA_LLM_API_KEY
+        sync: false
+      - key: SITESHAHA_ACCESS_CODE
+        sync: false
+      - key: SITESHAHA_RATE_LIMIT_PER_MINUTE
+        value: "60"
+      - key: SITESHAHA_MAX_CONCURRENT_REQUESTS
+        value: "4"
+      - key: SITESHAHA_TRUST_PROXY_HEADERS
+        value: "true"

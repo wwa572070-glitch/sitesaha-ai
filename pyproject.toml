@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sitesaha-ai"
+version = "15.0.0"
+description = "Online Chinese construction safety training assistant"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+pdf = ["pypdf>=5,<7"]
+docx = ["python-docx>=1.1,<2"]
+acquisition = ["lxml>=5,<7", "pypdf>=5,<7", "python-docx>=1.1,<2"]
+
+[tool.setuptools.packages.find]
+include = ["sitesaha*"]

@@ -1,0 +1,197 @@
+/* ==========================================================================
+   V15 暗色：深墨底 + 警示橙
+   与亮色共用同一套规则，只覆盖令牌。
+   作用域：[data-theme="dark"]
+   ========================================================================== */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --i950:#0b0e11;
+  --i900:#12161a;
+  --i800:#f3f4f6;
+  --i700:#d1d5db;
+  --i600:#c3cad2;
+  --i500:#8b93a1;
+  --i400:#6b7480;
+  --i300:#3a434e;
+  --i200:#2a323b;
+  --i100:#222932;
+  --i50:#1b222a;
+  --surface:#161c23;
+  --canvas:#10151a;
+
+  /* 警示橙在深底上要提亮 */
+  --safety:#f97316;
+  --safety-700:#ea580c;
+  --safety-500:#fb923c;
+  --safety-100:#3a2317;
+  --safety-50:#2a1a12;
+
+  --signal:#fbbf24;
+  --signal-100:#3d3212;
+  --signal-50:#2a2312;
+
+  --red:#f87171;
+  --red-bg:#2a1717;
+  --amber:#fbbf24;
+  --amber-bg:#2a2312;
+  --green:#4ade80;
+  --green-bg:#12291d;
+
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 1px 3px rgba(0,0,0,.45);
+  --shadow-3:0 4px 14px rgba(0,0,0,.5);
+}
+
+/* 顶栏与主行动卡在暗色下比页面更深，保持层次 */
+[data-theme="dark"] header,
+[data-theme="dark"] .action-card.is-primary,
+[data-theme="dark"] .emergency-hero { background:#0b0e11; }
+
+/* 警示斜纹在暗色下用亮橙，保持信号感 */
+[data-theme="dark"] .top-band {
+  background:repeating-linear-gradient(135deg, var(--safety) 0 10px, #0b0e11 10px 20px);
+}
+[data-theme="dark"] .phase-rule {
+  background:repeating-linear-gradient(135deg, #3a434e 0 5px, transparent 5px 10px);
+}
+
+/* 主按钮：亮橙底配近黑字，深底上对比度最高 */
+[data-theme="dark"] .primary-button,
+[data-theme="dark"] .amber-button { background:var(--safety); color:#1a0d05; }
+[data-theme="dark"] .primary-button:hover:not(:disabled),
+[data-theme="dark"] .amber-button:hover:not(:disabled) { background:var(--safety-500); color:#1a0d05; }
+[data-theme="dark"] .danger-button { background:var(--red); color:#2a0f0f; }
+[data-theme="dark"] .danger-button:hover:not(:disabled) { background:#fca5a5; }
+[data-theme="dark"] .filter-chip.active,
+[data-theme="dark"] .role-chip.active { background:var(--safety); border-color:var(--safety); color:#1a0d05; }
+
+/* 顶栏内元素 */
+[data-theme="dark"] .hero-kicker { background:#0b0e11; color:#f3f4f6; }
+[data-theme="dark"] .status-pill { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.14); color:#c3cad2; }
+[data-theme="dark"] .status-pill.offline { background:rgba(251,191,36,.16); border-color:rgba(251,191,36,.36); color:#fcd34d; }
+
+/* Hero */
+[data-theme="dark"] .hero { background:var(--surface); border-color:var(--i200); border-left-color:var(--safety); }
+[data-theme="dark"] .hero h2 { color:var(--i900); }
+[data-theme="dark"] .hero h2 em { color:var(--safety); }
+[data-theme="dark"] .hero-desc { color:var(--i600); }
+[data-theme="dark"] .hero-chip { background:var(--i50); border-color:var(--i200); color:var(--i600); }
+[data-theme="dark"] .hero-stats { border-color:var(--i200); }
+[data-theme="dark"] .hero-stats .stat-cell b { color:var(--i900); }
+[data-theme="dark"] .hero-stats .stat-cell.is-risk b { color:var(--red); }
+
+/* 行动卡 */
+[data-theme="dark"] .action-card { background:var(--surface); border-color:var(--i200); }
+[data-theme="dark"] .action-card strong { color:var(--i900); }
+[data-theme="dark"] .action-card p { color:var(--i500); }
+[data-theme="dark"] .action-ico { background:var(--safety-100); }
+[data-theme="dark"] .action-card.is-primary strong { color:#fff; }
+[data-theme="dark"] .action-card.is-primary p { color:var(--i400); }
+[data-theme="dark"] .action-card.is-primary .action-ico { background:var(--safety); }
+[data-theme="dark"] .action-card.is-danger { background:var(--surface); border-color:#4a2a22; }
+[data-theme="dark"] .action-card.is-danger .action-ico { background:var(--red-bg); }
+
+/* 面板与表头 */
+[data-theme="dark"] .panel,
+[data-theme="dark"] .panel-head { background:var(--surface); border-color:var(--i200); }
+[data-theme="dark"] .panel-head h2 { color:var(--i900); }
+[data-theme="dark"] th { background:#0b0e11; color:#f3f4f6; }
+[data-theme="dark"] td { border-color:var(--i200); color:var(--i600); }
+[data-theme="dark"] tbody tr:hover { background:var(--safety-50); }
+
+/* 清单与条目 */
+[data-theme="dark"] .todo-item b,
+[data-theme="dark"] .check-item b { color:var(--i900); }
+[data-theme="dark"] .todo-item span,
+[data-theme="dark"] .check-item small { color:var(--i500); }
+[data-theme="dark"] .todo-item.done,
+[data-theme="dark"] .check-item.checked,
+[data-theme="dark"] .step-item.is-done { background:var(--green-bg); border-color:#2c5a3d; }
+[data-theme="dark"] .todo-item.done b,
+[data-theme="dark"] .check-item.checked b { color:var(--green); }
+[data-theme="dark"] .todo-item:hover { background:var(--i50); }
+
+/* 复选框：必须显式上色，否则浅字压白底看不见 */
+[data-theme="dark"] input[type="checkbox"],
+[data-theme="dark"] input[type="radio"] {
+  background:var(--i50); border:1px solid var(--i300); accent-color:var(--safety);
+}
+[data-theme="dark"] input[type="checkbox"]:checked,
+[data-theme="dark"] input[type="radio"]:checked { background:var(--safety); border-color:var(--safety); }
+
+/* 提示条与标签 */
+[data-theme="dark"] .warn-box { background:var(--amber-bg); border-color:#4a3a1e; color:#fcd34d; }
+[data-theme="dark"] .warn-box b { color:#fcd34d; }
+[data-theme="dark"] .error-card { background:var(--red-bg); border-color:#5a2b2b; color:#fca5a5; }
+[data-theme="dark"] .error-card b { color:#fca5a5; }
+[data-theme="dark"] .em-never { background:var(--red-bg); border-color:#5a2b2b; color:#fca5a5; }
+[data-theme="dark"] .case-tag { background:var(--signal-100); color:var(--signal); }
+[data-theme="dark"] .case-lesson { background:var(--green-bg); border-color:var(--green); color:#86efac; }
+[data-theme="dark"] mark.hit { background:#4a3a10; color:#ffe9b0; }
+
+/* 会话 */
+[data-theme="dark"] .avatar { background:#3a434e; color:#ffffff; }
+[data-theme="dark"] .msg-row.from-user .avatar { background:var(--safety); color:#1a0d05; }
+[data-theme="dark"] .bubble { background:var(--i50); border-color:var(--i200); }
+[data-theme="dark"] .msg-row.from-user .bubble { background:#3a2317; border-color:#4d2f1e; }
+[data-theme="dark"] .bubble-title { color:var(--i900); }
+[data-theme="dark"] .msg-row.from-user .bubble-title { color:#fdba74; }
+[data-theme="dark"] .answer-body { color:var(--i600); }
+[data-theme="dark"] .chat-stream { background:var(--canvas); }
+
+/* 指标、进度 */
+[data-theme="dark"] .metric { background:var(--i50); border-color:var(--i200); }
+[data-theme="dark"] .metric strong { color:var(--i900); }
+[data-theme="dark"] .progress-track,
+[data-theme="dark"] .domain-bar .dtrack { background:#3a434e; }
+
+/* 证书：打印目标，保持白底黑字 */
+[data-theme="dark"] .certificate { background:#fff; border-color:#0b0e11; }
+[data-theme="dark"] .certificate h3,
+[data-theme="dark"] .certificate dd { color:#0b0e11; }
+[data-theme="dark"] .certificate dt { color:#6b7480; }
+[data-theme="dark"] .certificate .cert-kicker { color:#b23a0a; }
+[data-theme="dark"] .certificate .cert-rule { background:#b23a0a; }
+[data-theme="dark"] .certificate .cert-sign div { border-top-color:#98a1ac; color:#6b7480; }
+
+/* 页脚 */
+[data-theme="dark"] .footer-line { border-top-color:#f3f4f6; }
+[data-theme="dark"] .footer-line b { color:var(--i700); }
+
+/* 骨架屏 */
+[data-theme="dark"] .sk {
+  background:linear-gradient(90deg,#1b222a 25%,#242d37 37%,#1b222a 63%);
+  background-size:400% 100%;
+}
+
+/* 打印始终走亮色 */
+@media print {
+  [data-theme="dark"] body { background:#fff; color:#000; }
+  [data-theme="dark"] .certificate { background:#fff; color:#000; }
+}
+
+/* ==========================================================================
+   修复：V15 主题层里有 14 处把「背景色令牌」当文字色用
+   （--i950 / --i900 在暗色下是近黑，于是深字压深底，标题整片消失）。
+   这里统一把这些选择器的文字色改为对两个主题都成立的中性色：
+   --i800 在亮色下是 #22272e（深），在暗色下是 #f3f4f6（浅）。
+   ========================================================================== */
+[data-theme="dark"] .hero h2,
+[data-theme="dark"] .hero-stats .stat-cell b,
+[data-theme="dark"] .action-card strong,
+[data-theme="dark"] .panel-head h2,
+[data-theme="dark"] .todo-item b,
+[data-theme="dark"] .check-item b,
+[data-theme="dark"] .metric strong,
+[data-theme="dark"] .training-card strong,
+[data-theme="dark"] .case-card h3,
+[data-theme="dark"] .bubble-title,
+[data-theme="dark"] .src-title,
+[data-theme="dark"] .source-card h5,
+[data-theme="dark"] .emergency-card strong,
+[data-theme="dark"] .phase-title {
+  color: var(--i800);
+}
+[data-theme="dark"] .certificate h3,
+[data-theme="dark"] .certificate dd { color: #0b0e11; }

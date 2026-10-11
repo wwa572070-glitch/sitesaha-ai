@@ -1,0 +1,2 @@
+# The online web service uses only the Python standard library.
+# Install optional document-ingestion packages from requirements-ingest.txt.

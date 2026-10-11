@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/priscilla254/RAG-Construction-Assistant",
+  "description": "Cited RAG over UK construction safety and building regulations (Approved Documents, HSG141, HSG150). Hybrid BM25 + Chroma + Streamlit.",
+  "default_branch": "main",
+  "license": "MIT",
+  "selected_files": [
+    "LICENSE",
+    "README.md",
+    "app.py",
+    "src/rag_assistant/config.py",
+    "src/rag_assistant/retriever.py",
+    "src/rag_assistant/keyword_search.py",
+    "src/rag_assistant/vector_store.py",
+    "src/rag_assistant/generator.py",
+    "src/rag_assistant/pipeline.py"
+  ],
+  "integration_reason": "The project demonstrates grounded citations, hybrid BM25 plus vector retrieval, RRF fusion, per-source result caps, and an offline-friendly Streamlit workflow."
+}

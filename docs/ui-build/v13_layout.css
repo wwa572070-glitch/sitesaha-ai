@@ -1,0 +1,195 @@
+/* ==========================================================================
+   V13-L 布局层：把主内容收成单一纵向阅读流
+   --------------------------------------------------------------------------
+   为什么改：V13 的首页是"两栏并排 + 5 段分组"，但每一段内部又是 2 栏并排，
+   再加上每块都是带边框的白卡片，结果同屏并排 3~4 个视线落点，
+   眼睛不知道该先看哪个 —— 这就是"没有条理、看着乱"的直接来源。
+
+   规则（强制，不再有例外）：
+     1) 主内容最大宽度收到 960px 并居中；阅读时视线只走一条竖线
+     2) 不再出现并排的分栏容器，全部改为纵向堆叠
+     3) 卡片只用于"独立信息块"；连续条目改用分隔线，不再一块一个边框
+     4) 段与段之间用留白 + 一条浅分隔线分开，不再用编号圆点和大标题
+   ========================================================================== */
+
+/* ---------- 单一阅读流 ---------- */
+main {
+  max-width:960px;
+  margin:0 auto;
+  padding:28px 24px 56px;
+  display:block;          /* 取消栅格，改为普通纵向流 */
+}
+.view { display:none; }
+.view.active { display:block; }
+
+/* 首页：所有阶段容器都是纵向堆叠，不再有 phase-cols / phase-main / phase-side */
+.phase { margin:0; }
+.phase-cols,
+.phase-single,
+.phase-main,
+.phase-side {
+  display:block;
+  margin:0;
+  padding:0;
+}
+.phase-cols > *,
+.phase-single > *,
+.phase-main > *,
+.phase-side > * { margin:0; }
+.phase-cols > * + *,
+.phase-single > * + *,
+.phase-main > * + *,
+.phase-side > * + * { margin-top:20px; }
+
+/* ---------- 阶段：改为"小标签 + 细分隔线"，去掉大编号圆点 ---------- */
+.phase { margin-top:40px; }
+.phase:first-of-type { margin-top:12px; }
+.phase-head {
+  display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:4px;
+}
+.phase-no {
+  display:none;   /* 编号圆点在单列流里反而增加噪声，收进标题里表达 */
+}
+.phase-title {
+  font-size:13px; font-weight:700; color:var(--green-700);
+  letter-spacing:.08em; font-family:var(--mono); text-transform:uppercase;
+}
+.phase-desc {
+  font-size:13px; color:var(--ink-400); flex:1 1 auto; min-width:0;
+}
+.phase-rule { height:1px; background:var(--ink-100); margin:8px 0 20px; }
+
+/* ---------- 卡片：只给真正独立的信息块 ---------- */
+.panel {
+  box-shadow:none;
+  border:1px solid var(--ink-100);
+  border-radius:var(--r-md);
+}
+.panel:hover { box-shadow:none; }
+.panel + .panel { margin-top:20px; }
+.panel-head { padding:12px 16px; }
+.panel-head h2 { font-size:15px; }
+.panel-head::before { height:14px; width:3px; margin-right:8px; }
+.panel-body { padding:16px; }
+
+/* 连续条目：用分隔线而不是一个个边框 */
+.todo-item, .check-item, .side-doc-list li, .source-card, .option, .training-card,
+.quiz-stat, .role-block, .case-card, .step-item, .photo-tip, .result-box {
+  border:0;
+  border-bottom:1px solid var(--ink-100);
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.todo-item:last-child, .check-item:last-child, .side-doc-list li:last-child,
+.source-card:last-child, .option:last-child, .training-card:last-child,
+.case-card:last-child, .step-item:last-child { border-bottom:0; }
+.todo-item { padding:12px 2px; }
+.todo-item:hover { background:var(--ink-50); }
+.check-item { padding:12px 2px; }
+.training-card { padding:12px 2px; border-left:0; }
+.case-card { padding:12px 2px; border-top:0; border-bottom:1px solid var(--ink-100); }
+.step-item { padding:12px 2px; }
+.option { padding:12px 2px; margin-bottom:0; }
+.option:hover:not(:disabled) { background:var(--green-50); }
+.source-card { padding:12px 2px; border-left:0; }
+.role-block, .quiz-stat, .result-box, .photo-tip { padding:12px 2px; }
+
+/* 网格容器全部改为单列纵向 */
+.metric-grid, .training-grid, .case-grid, .role-cols, .photo-tips,
+.home-actions, .entries, .document-list, .source-list, .em-calls {
+  display:block;
+}
+.metric-grid > * + *,
+.training-grid > * + *,
+.case-grid > * + *,
+.role-cols > * + *,
+.home-actions > * + *,
+.entries > * + *,
+.source-list > * + *,
+.em-calls > * + * { margin-top:12px; }
+
+/* 指标块：改为横向一行四格，不再各自成卡 */
+.metric-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.metric {
+  border:0; background:var(--ink-50); border-radius:var(--r-sm);
+  padding:12px 12px; text-align:left;
+}
+.metric strong { font-size:21px; }
+.metric span { display:block; font-size:12px; color:var(--ink-400); margin-top:2px; }
+
+/* 三个主入口：横向一行三格 */
+.entries, .home-actions {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px;
+}
+
+/* ---------- Hero：收窄，去掉大标题压迫感 ---------- */
+/* 注意：不要在这里直接写 color —— .hero 的选择器权重会盖过
+   [data-theme="dark"] .hero，导致暗色模式失效。正文颜色统一交给令牌。 */
+.hero { padding:24px; margin-bottom:28px; }
+.hero h2 { font-size:21px; line-height:1.4;; }
+.hero-desc { font-size:13px; }
+
+/* ---------- Hero 内嵌的指标行 ----------
+   原来是一条独立的深色横带，占 78px，把三个主入口挤到首屏之外。
+   现在并进 Hero，压成一行紧凑数据：数字 + 单位并排，去掉第二行说明。 */
+.hero-stats {
+  display:flex; flex-wrap:wrap; gap:8px 24px;
+  margin:16px 0 4px; padding:12px 0;
+  border-top:1px solid var(--ink-100); border-bottom:1px solid var(--ink-100);
+}
+.hero-stats .stat-cell {
+  padding:0; border:0; display:flex; align-items:baseline; gap:4px; min-width:0;
+}
+.hero-stats .stat-cell b {
+  font-size:17px; font-weight:700; color:var(--ink-800);
+  font-variant-numeric:tabular-nums; letter-spacing:-.01em;
+}
+.hero-stats .stat-cell span { font-size:12px; color:var(--ink-400); }
+.hero-stats .stat-cell small { display:none; }
+.hero-stats .stat-cell.is-risk b { color:var(--danger-600); }
+
+/* ---------- 行动卡：去掉大图标块，改小图标行 ---------- */
+.action-card {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:16px; border-radius:var(--r-md); border:1px solid var(--ink-100);
+}
+.action-ico {
+  width:32px; height:32px; flex:0 0 32px; border-radius:var(--r-sm); font-size:15px;
+}
+.action-card strong { font-size:13px; }
+.action-card p { font-size:12px; line-height:1.6;;; }
+.action-go { display:none; }   /* 整块可点，不需要额外箭头 */
+
+/* 深色主卡里的绿字要提亮，否则深底压深绿看不清 */
+.action-card.is-primary .action-go,
+.action-card.is-primary p { color:#a7f3d0; }
+
+/* ---------- 顶栏与导航同步收窄 ---------- */
+.header-inner, .stat-inner, .nav-inner { max-width:960px; }
+main, footer { max-width:960px; }
+footer { padding:20px 24px 48px; }
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px) {
+  main { padding:20px 16px 48px; }
+  .metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .entries, .home-actions { grid-template-columns:1fr; }
+  .action-card { align-items:center; }
+  .hero h2 { font-size:21px; }
+  .phase { margin-top:32px; }
+}
+@media (max-width:640px) {
+  main { padding:16px 12px 40px; }
+  .header-inner, .stat-inner, .nav-inner { padding-left:12px; padding-right:12px; }
+  .hero { padding:16px; }
+  .hero h2 { font-size:17px; }
+  .hero-desc { font-size:13px; }
+  .panel-head, .panel-body { padding:12px; }
+  .metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .metric { padding:8px 12px; }
+  .metric strong { font-size:15px; }
+  .phase-title { font-size:12px; }
+  .phase-desc { flex-basis:100%; }
+  .primary-button { width:100%; }
+}

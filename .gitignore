@@ -1,0 +1,38 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.streamlit/
+.venv/
+.env
+.env.*
+!.env.example
+data/sitesaha.db
+data/sitesaha.db-shm
+data/sitesaha.db-wal
+data/test-web.db
+data/uploads/
+work/
+outputs/
+# 测试在受限环境下留下的空临时目录（tempfile.TemporaryDirectory 清理失败）
+tmp*/
+_test_tmp/
+candidate-*/
+# 本机回滚备份，不进入版本库
+webapp.py.bak-*
+*.bak-v*
+docs/ui-build/_audit_report.md
+docs/ui-build/index_script_check.js
+docs/ui-build/_old_*.js
+docs/ui-build/_new_*.js
+
+# 本地截图与审计产物（含 Edge profile，路径过长且无需入库）
+docs/ui-build/_shot/
+_shot/
+
+# design-baseline 运行缓存与截图产物
+.scratch/
+docs/ui-build/_archive/
+docs/ui-build/evidence/_crop*.png
+
+# GitHub Actions 不参与部署（Render 有自己的构建流程），且推送需要额外 token 权限
+.github/
