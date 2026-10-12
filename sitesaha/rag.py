@@ -46,6 +46,69 @@ def _sentence_score(sentence: str, units: set[str]) -> float:
     return overlap * 3.0 + length_bonus
 
 
+
+def _strip_page_number(text: str) -> str:
+    """剥掉粘在句子开头的页码或条目编号。
+
+    标准 PDF 转文本后常见 "91\n起重吊装作业前应…" 这种，
+    页码会被并到句子里，显示成 "91 起重吊装作业前应…"。
+    """
+    if not text:
+        return text
+    # 开头是 1~4 位数字，后面紧跟非数字（说明是页码而不是内容里的数字）
+    cleaned = re.sub(r"^\s*\d{1,4}\s*[、.．)）]?\s+(?=\D)", "", text)
+    # 纯页码行
+    if re.fullmatch(r"\s*\d{1,4}\s*", cleaned or ""):
+        return ""
+    return cleaned
+
+
+def _looks_like_table_fragment(text: str) -> bool:
+    """判断一段文字是不是评分表/表格碎片，不适合直接给用户看。
+
+    为什么需要：JGJ59 这类标准里有大量评分表，检索会把
+    「吊运易散落物件不使用吊笼，扣6 分」「10」「8」「高处」这种片段捞出来。
+    它们单独看没有意义，堆在答案里就像乱码。
+
+    判定依据（任一命中即视为碎片）：
+      · 含「扣X分」「得X分」这类评分用语
+      · 去掉标点后大部分是数字
+      · 太短（少于 10 个字）
+      · 只由若干短词堆叠、没有完整谓语结构
+    """
+    if not text:
+        return True
+    stripped = re.sub(r"\s+", "", text)
+
+    # 评分表用语
+    if re.search(r"[扣得加]\s*\d+\s*分", text):
+        return True
+    if re.search(r"应得\s*分|实得\s*分|评分\s*分", text):
+        return True
+
+    # 太短
+    if len(stripped) < 10:
+        return True
+
+    # 数字占比过高
+    digits = sum(1 for ch in stripped if ch.isdigit())
+    if digits / max(len(stripped), 1) > 0.35:
+        return True
+
+    # 缺少句读：中文正常句子会有标点，表格碎片往往没有
+    if not re.search(r"[，。；：、！？,.;:]", stripped):
+        return True
+
+    # 连续短词堆叠（如评分表里逐行排列的短词），标点密度过低
+    punctuation = len(re.findall(r"[，。；：、！？,.;:]", stripped))
+    if punctuation == 0 and len(stripped) < 40:
+        return True
+
+    return False
+
+
+
+
 class RAGEngine:
     def __init__(self, kb: KnowledgeBase, config: AppConfig):
         self.kb = kb
@@ -97,12 +160,19 @@ class RAGEngine:
                     text = "⚠️ 在完成安全交底、条件确认和必要授权前，不要擅自继续操作。\n\n" + text
                 return Answer(text=text, sources=sources, mode="local-llm", warnings=[f"风险等级：{risk}"])
             except Exception as exc:
-                warnings.append(f"在线模型生成失败，已回退到检索摘要：{type(exc).__name__}")
+                # 保留真实原因 —— 只记异常类名（ProviderError）没法定位问题
+                detail = type(exc).__name__
+                code = getattr(exc, "code", "")
+                message = str(getattr(exc, "message", "") or exc)
+                if code:
+                    detail = f"{detail}/{code}"
+                if message:
+                    detail = f"{detail}：{message[:120]}"
+                warnings.append(f"在线模型生成失败，已回退到检索摘要（{detail}）")
         elif self.config.llm_mode != "off":
             warnings.append(status.detail)
 
         return Answer(text=self._extractive_answer(clean_question, sources, intent, risk), sources=sources, mode="extractive", warnings=[f"风险等级：{risk}", *warnings])
-
     def _extractive_answer(self, question: str, sources: list[SearchResult], intent: str, risk: str) -> str:
         units = overlap_units(question)
         selected: list[tuple[float, str, int]] = []
@@ -112,8 +182,15 @@ class RAGEngine:
                 normalized = re.sub(r"\s+", "", strip_markdown(sentence))
                 if not normalized or normalized in seen or len(normalized) < 8:
                     continue
+                # 剔除评分表碎片 —— 否则回退答案会把「扣10分」这类片段堆出来
+                if _looks_like_table_fragment(sentence):
+                    continue
+                # 剥掉粘在句首的页码，如 "91 起重吊装作业前应…"
+                cleaned = _strip_page_number(sentence).strip()
+                if _looks_like_table_fragment(cleaned):
+                    continue
                 seen.add(normalized)
-                selected.append((_sentence_score(sentence, units), sentence.strip(), source_index))
+                selected.append((_sentence_score(cleaned, units), cleaned, source_index))
         selected.sort(key=lambda item: item[0], reverse=True)
         actions: list[tuple[str, int]] = []
         for _, sentence, source_index in selected:
@@ -142,6 +219,10 @@ class RAGEngine:
             lines.append(f"{index}. {action} [{source_index}]")
         if not actions:
             lines.append("2. 请打开下方依据，并结合现场交底确认。")
+        if len(actions) < 2:
+            lines.append("")
+            lines.append("提示：知识库里这个问题的可读内容较少（检索到的主要是标准评分表）。"
+                         "如需成段解释，请让管理员确认文字模型是否可用。")
         lines.append("")
         lines.append("依据编号对应下方“规范依据”。")
         return "\n".join(lines)

@@ -83,11 +83,14 @@ def classify_upstream(status: int, detail: str) -> ProviderError:
                          retryable=retryable, raw=detail)
 
 
-def with_retry(operation, *, attempts: int = 3, base_delay: float = 0.8,
-               max_delay: float = 2.0):
+def with_retry(operation, *, attempts: int = 4, base_delay: float = 2.0,
+               max_delay: float = 12.0):
     """对可重试的 ProviderError 做指数退避。
 
-    依据第 16 轮 §4.2：429/5xx 退避 0.8s → 2s，最多 2 次重试（共 3 次尝试）。
+    依据第 16 轮 §4.2，并在线上实测后调整：
+    免费模型（glm-4-flash）的限流恢复比较慢，原来 0.8s→2s 的重试窗口太短，
+    实测会出现「重试完仍然 429 → 回退成检索摘要」。
+    现在改成 2s → 4s → 8s（封顶 12s），共 4 次尝试。
     """
     last: ProviderError | None = None
     for index in range(attempts):
