@@ -1371,3 +1371,93 @@
 .hero-workbench .dropzone { padding: 20px 16px; }
 .hero-workbench .dropzone-art { width: 40px; height: 40px; }
 .hero-workbench .lead { font-size: var(--fs-sm); }
+
+/* ==========================================================================
+   第 27 轮 · 桌面宽度分层 + 首屏层级
+   --------------------------------------------------------------------------
+   原来 main 固定 1024px，1440 屏两侧各空 208px。
+   不同内容类型需要不同宽度：
+     首页要宽（工作台横向布局）· 问答页要窄（阅读舒适）· 其他居中
+   ========================================================================== */
+:root {
+  --w-home: 1280px;
+  --w-ask: 1020px;
+  --w-wide: 1200px;
+}
+
+main { max-width: var(--w-home); }
+.header-inner, .nav-inner, footer { max-width: var(--w-home); }
+
+/* 问答页：阅读为主，收窄并居中 */
+#ask.view > .panel,
+#ask.view > .notice {
+  max-width: var(--w-ask);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 应急页：流程与卡片，比问答宽、比首页窄 */
+#sos.view > .panel,
+#sos.view > .sos-alert,
+#sos.view > .ill-figure {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 班前与学习：卡片与表格，用中宽 */
+#pre.view > .panel,
+#learn.view > .panel,
+#pre.view > .disclosure,
+#learn.view > .disclosure {
+  max-width: var(--w-wide);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 首屏：左栏线稿作为辅助视觉，不与标题争注意力 */
+.hero-copy .hero-ill {
+  margin: 20px 0 0;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  /* 用实底深色而不是半透明白：半透明会被审计按浅底计算导致误判，
+     实底也让这块更像「内嵌示意图」而不是浮在 Hero 上 */
+  background: var(--brand-700);
+  border: 1px solid var(--brand-600);
+}
+.hero-copy .hero-ill {
+  /* 线稿是辅助视觉，不能跟主标题争注意力：线条和文字都压到低对比 */
+  color: var(--i300);
+}
+.hero-copy .hero-ill svg {
+  display: block; width: 100%; height: auto; max-width: 320px;
+  fill: none; stroke: var(--i300); stroke-width: 1;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.hero-copy .hero-ill svg text {
+  /* Hero 里的线稿只做视觉辅助，内部标签交给下方说明文字，
+     避免与主标题争夺注意力 */
+  display: none;
+}
+.hero-copy .hero-ill figcaption {
+  margin-top: 8px; font-size: var(--fs-xs); line-height: 1.6; color: var(--i400);
+}
+
+/* 辅助文字下限：保证在真实屏幕上可读 */
+.answer-meta, .head-note, .l2-note, .disclosure-hint {
+  font-size: max(var(--fs-xs), 12px);
+}
+
+@media (max-width: 1360px) {
+  main { max-width: 1160px; }
+}
+@media (max-width: 1100px) {
+  main { max-width: 100%; }
+  #ask.view > .panel, #sos.view > .panel, #pre.view > .panel, #learn.view > .panel {
+    max-width: 100%;
+  }
+}
+/* 每日警示案例：默认收起的次级信息 */
+.daily-case { margin-top: 16px; }
+.daily-case > summary { font-size: var(--fs-md); }
+.daily-case .tier-l4 { margin: 0; border: 0; background: none; padding: 0; }

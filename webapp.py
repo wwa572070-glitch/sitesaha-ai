@@ -2283,6 +2283,36 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -4613,6 +4643,96 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 .hero-workbench .dropzone { padding: 20px 16px; }
 .hero-workbench .dropzone-art { width: 40px; height: 40px; }
 .hero-workbench .lead { font-size: var(--fs-sm); }
+
+/* ==========================================================================
+   第 27 轮 · 桌面宽度分层 + 首屏层级
+   --------------------------------------------------------------------------
+   原来 main 固定 1024px，1440 屏两侧各空 208px。
+   不同内容类型需要不同宽度：
+     首页要宽（工作台横向布局）· 问答页要窄（阅读舒适）· 其他居中
+   ========================================================================== */
+:root {
+  --w-home: 1280px;
+  --w-ask: 1020px;
+  --w-wide: 1200px;
+}
+
+main { max-width: var(--w-home); }
+.header-inner, .nav-inner, footer { max-width: var(--w-home); }
+
+/* 问答页：阅读为主，收窄并居中 */
+#ask.view > .panel,
+#ask.view > .notice {
+  max-width: var(--w-ask);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 应急页：流程与卡片，比问答宽、比首页窄 */
+#sos.view > .panel,
+#sos.view > .sos-alert,
+#sos.view > .ill-figure {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 班前与学习：卡片与表格，用中宽 */
+#pre.view > .panel,
+#learn.view > .panel,
+#pre.view > .disclosure,
+#learn.view > .disclosure {
+  max-width: var(--w-wide);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 首屏：左栏线稿作为辅助视觉，不与标题争注意力 */
+.hero-copy .hero-ill {
+  margin: 20px 0 0;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  /* 用实底深色而不是半透明白：半透明会被审计按浅底计算导致误判，
+     实底也让这块更像「内嵌示意图」而不是浮在 Hero 上 */
+  background: var(--brand-700);
+  border: 1px solid var(--brand-600);
+}
+.hero-copy .hero-ill {
+  /* 线稿是辅助视觉，不能跟主标题争注意力：线条和文字都压到低对比 */
+  color: var(--i300);
+}
+.hero-copy .hero-ill svg {
+  display: block; width: 100%; height: auto; max-width: 320px;
+  fill: none; stroke: var(--i300); stroke-width: 1;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.hero-copy .hero-ill svg text {
+  /* Hero 里的线稿只做视觉辅助，内部标签交给下方说明文字，
+     避免与主标题争夺注意力 */
+  display: none;
+}
+.hero-copy .hero-ill figcaption {
+  margin-top: 8px; font-size: var(--fs-xs); line-height: 1.6; color: var(--i400);
+}
+
+/* 辅助文字下限：保证在真实屏幕上可读 */
+.answer-meta, .head-note, .l2-note, .disclosure-hint {
+  font-size: max(var(--fs-xs), 12px);
+}
+
+@media (max-width: 1360px) {
+  main { max-width: 1160px; }
+}
+@media (max-width: 1100px) {
+  main { max-width: 100%; }
+  #ask.view > .panel, #sos.view > .panel, #pre.view > .panel, #learn.view > .panel {
+    max-width: 100%;
+  }
+}
+/* 每日警示案例：默认收起的次级信息 */
+.daily-case { margin-top: 16px; }
+.daily-case > summary { font-size: var(--fs-md); }
+.daily-case .tier-l4 { margin: 0; border: 0; background: none; padding: 0; }
 /* ===== V16 TIERS END ===== */
 
 /* ===== V17 PALETTE BEGIN ===== */
@@ -5716,23 +5836,23 @@ input.is-suspect {
   </symbol>
 
   <!-- ===== 示意图用（较大、线稿） ===== -->
-    <symbol id="ill-edge" viewBox="0 0 240 130">
-    <path d="M8 96h140v18H8z"/>
-    <path d="M8 96h140"/>
-    <circle cx="52" cy="64" r="6"/>
-    <path d="M52 70v14M52 76l-8 6M52 76l8 6M52 84l-6 12M52 84l6 12"/>
-    <path d="M124 38v76M200 38v76"/>
-    <path d="M112 44h96"/>
-    <path d="M112 68h96"/>
-    <path d="M112 88h96M112 96h96"/>
-    <path d="M216 44v52"/>
-    <path d="M210 44h12M210 96h12"/>
-    <text x="18" y="90" font-size="10" fill="currentColor">作业面</text>
-    <text x="126" y="32" font-size="10" fill="currentColor">临边防护栏杆 1.2m</text>
-    <text x="112" y="124" font-size="10" fill="currentColor">挡脚板 ≥180mm</text>
+  <symbol id="ill-edge" viewBox="0 0 240 130">
+    <path d="M10 118h220"/>
+    <path d="M20 118V30h70v88"/>
+    <path d="M20 30h70"/>
+    <path d="M90 44v74"/>
+    <path d="M90 44h-8M90 44v8"/>
+    <path d="M110 40h110v10H110z"/>
+    <path d="M120 50v26M215 50v26"/>
+    <path d="M120 76h95"/>
+    <path d="M150 76v22M180 76v22"/>
+    <path d="M110 98h110"/>
+    <text x="118" y="26" font-size="11" fill="currentColor">临边防护栏杆 1.2m</text>
+    <text x="30" y="24" font-size="11" fill="currentColor">作业面</text>
+    <text x="128" y="112" font-size="11" fill="currentColor">挡脚板 ≥180mm</text>
   </symbol>
 
-<symbol id="ill-scaffold" viewBox="0 0 240 130">
+  <symbol id="ill-scaffold" viewBox="0 0 240 130">
     <path d="M10 122h220"/>
     <path d="M40 122V18M124 122V18M208 122V18"/>
     <path d="M40 40h168M40 72h168M40 104h168"/>
@@ -5743,67 +5863,22 @@ input.is-suspect {
     <text x="150" y="118" font-size="11" fill="currentColor">扫地杆</text>
   </symbol>
 
-    <symbol id="ill-emergency" viewBox="0 0 240 130">
-    <path d="M10 106h220"/>
-    <path d="M36 100V78h5V62a3.5 3.5 0 0 1 7 0v16h4V58a3.5 3.5 0 0 1 7 0v20h4V64a3.5 3.5 0 0 1 7 0v14h4V72a3.5 3.5 0 0 1 7 0v14a16 16 0 0 1-16 16H52a16 16 0 0 1-16-16z"/>
-    <path d="M26 50h46"/>
-    <text x="27" y="40" font-size="10" fill="currentColor">1 停手</text>
-    <text x="26" y="124" font-size="10" fill="currentColor">停止作业</text>
-
-    <circle cx="112" cy="56" r="6"/>
-    <path d="M112 62v17M112 68l-10 7M112 68l10 7M112 79l-8 12M112 79l8 12"/>
-    <path d="M130 74h28"/>
-    <path d="M150 66l9 8-9 8"/>
-    <text x="104" y="40" font-size="10" fill="currentColor">2 撤离</text>
-    <text x="100" y="124" font-size="10" fill="currentColor">撤到安全区</text>
-
-    <rect x="182" y="70" width="36" height="30" rx="5"/>
-    <path d="M191 86h18"/>
-    <circle cx="200" cy="60" r="6"/>
-    <path d="M200 66v-4"/>
-    <text x="180" y="40" font-size="10" fill="currentColor">3 报告</text>
-    <text x="176" y="124" font-size="10" fill="currentColor">报告负责人</text>
+  <symbol id="ill-ppe" viewBox="0 0 240 130">
+    <path d="M30 96h180"/>
+    <path d="M28 78h34V62a17 17 0 0 1 34 0v16H62"/>
+    <path d="M45 62V52a8 8 0 0 1 16 0v10"/>
+    <path d="M112 78V48M100 78h24"/>
+    <path d="M100 56h24"/>
+    <path d="M112 78v18"/>
+    <circle cx="112" cy="100" r="5"/>
+    <rect x="150" y="58" width="30" height="20" rx="3"/>
+    <path d="M165 58v20"/>
+    <rect x="192" y="58" width="26" height="20" rx="3"/>
+    <path d="M205 58v20"/>
+    <text x="30" y="116" font-size="11" fill="currentColor">安全帽</text>
+    <text x="100" y="116" font-size="11" fill="currentColor">安全带</text>
+    <text x="150" y="116" font-size="11" fill="currentColor">手套 护目镜</text>
   </symbol>
-
-<symbol id="ill-ppe" viewBox="0 0 240 130">
-    <path d="M24 46a20 20 0 0 1 40 0"/>
-    <path d="M15 46h58"/>
-    <path d="M44 26v20"/>
-    <path d="M31 29v17M57 29v17"/>
-    <text x="20" y="64" font-size="10" fill="currentColor">安全帽</text>
-
-    <rect x="96" y="33" width="21" height="17" rx="7"/>
-    <rect x="125" y="33" width="21" height="17" rx="7"/>
-    <path d="M117 41h8"/>
-    <path d="M96 39l-11-6M146 39l11-6"/>
-    <text x="98" y="64" font-size="10" fill="currentColor">护目镜</text>
-
-    <path d="M180 47V33a4 4 0 0 1 8 0v14"/>
-    <path d="M188 45V30a4 4 0 0 1 8 0v15"/>
-    <path d="M196 45V32a4 4 0 0 1 8 0v13"/>
-    <path d="M204 47V36a4 4 0 0 1 8 0v11"/>
-    <path d="M180 47h32v5a13 13 0 0 1-13 13h-6a13 13 0 0 1-13-13z"/>
-    <path d="M180 51l-8 3a4 4 0 0 0 2 7l6-2"/>
-    <text x="182" y="76" font-size="10" fill="currentColor">防护手套</text>
-
-    <path d="M31 88h26"/>
-    <path d="M31 88l-5 7v31h36V95l-5-7"/>
-    <path d="M38 88l7 9 7-9"/>
-    <path d="M26 104h36M26 114h36"/>
-    <text x="22" y="128" font-size="10" fill="currentColor">反光背心</text>
-
-    <path d="M104 102h32v8h-32z"/>
-    <path d="M108 102l6-16M132 102l-6-16"/>
-    <path d="M112 94h16"/>
-    <path d="M108 110v4a7 7 0 0 0 7 7M132 110v4a7 7 0 0 1-7 7"/>
-    <text x="106" y="128" font-size="10" fill="currentColor">安全带</text>
-
-    <path d="M182 114V92h13v10h13a9 9 0 0 1 9 9v3z"/>
-    <path d="M182 109h35"/>
-    <path d="M187 94h5M187 99h5"/>
-    <text x="184" y="128" font-size="10" fill="currentColor">安全鞋</text>
-  </symbol>
-
 </svg>
 <!-- ===== V16 ICONS END ===== -->
 
@@ -5893,6 +5968,14 @@ input.is-suspect {
           <div id="homeRoleChips" class="role-chips is-inline" role="group" aria-label="选择工种"></div>
         </div>
         <div id="homeRoleHint" class="l1-rolehint">还没有选择工种 —— 未选择时按通用要点回答，选择后会自动带上本工种的主要风险与必守规矩。</div>
+        <figure class="hero-ill">
+          <svg viewBox="0 0 240 130" role="img" aria-labelledby="heroIllLabel">
+            <title id="heroIllLabel">临边防护做法：栏杆 1.2 米、设中间防护、挡脚板不低于 180 毫米</title>
+            <use href="#ill-edge"/>
+          </svg>
+          <figcaption>识别结果会指出风险在画面的哪个位置，方便你对着照片核对。</figcaption>
+        </figure>
+
         </div><!-- /hero-copy -->
 
         <div class="hero-workbench" id="heroWorkbench">
@@ -6085,6 +6168,9 @@ input.is-suspect {
       <details class="disclosure">
   <summary>安全底线（三条，必读）<span class="disclosure-hint">展开看全部</span></summary>
   <div class="disclosure-body">
+<details class="disclosure daily-case" id="dailyCaseWrap">
+  <summary>每日警示案例<span class="disclosure-hint">每天轮换一条，点开看</span></summary>
+  <div class="disclosure-body">
 <div class="tier-l4">
         <div class="l4-head">
           <svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>
@@ -6095,6 +6181,8 @@ input.is-suspect {
           <div class="tier-skeleton" style="height:74px"></div>
         </div>
       </div>
+  </div>
+</details>
   </div>
 </details>
 
