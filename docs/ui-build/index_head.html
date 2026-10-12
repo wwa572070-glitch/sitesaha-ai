@@ -2004,6 +2004,21 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -3924,6 +3939,61 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 @media (max-width: 640px) {
   .disclosure > summary { padding: 12px; font-size: var(--fs-base); }
   .disclosure-body { padding: 0 12px 12px; }
+}
+
+/* ==========================================================================
+   §4 应急页收口（第 20 轮）
+   --------------------------------------------------------------------------
+   原来 120/119 在页面中段，且全站重复出现 5~6 次。
+   现在：拨号条吸底常驻，120 正红 / 119 橙红，另加打印。
+   ========================================================================== */
+.em-call-bar {
+  position: sticky; bottom: 0; z-index: 30;
+  display: flex; flex-wrap: wrap; gap: 10px;
+  padding: 12px 0 4px;
+  background: linear-gradient(to top, var(--surface) 72%, transparent);
+}
+.call-button {
+  flex: 1 1 auto; min-height: 52px; min-width: 120px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: var(--r-sm); border: 1px solid transparent;
+  font-size: var(--fs-lg); font-weight: 800;
+  text-decoration: none; cursor: pointer;
+}
+.call-button.is-medical { background: #b3261e; color: #fff; }
+.call-button.is-medical:hover { background: #8f1d17; color: #fff; }
+.call-button.is-fire { background: #bf4a1a; color: #fff; }
+.call-button.is-fire:hover { background: #a33d13; color: #fff; }
+.call-button.is-print {
+  background: var(--surface); color: var(--i700); border-color: var(--i300);
+  flex: 0 0 auto; font-size: var(--fs-md); min-width: 0;
+}
+.call-button.is-print:hover { border-color: var(--brand); color: var(--brand); }
+.call-button:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .em-call-bar { gap: 8px; }
+  .call-button { font-size: var(--fs-base); min-height: 50px; }
+  .call-button.is-print { flex: 1 1 100%; }
+}
+
+/* 打印：只印应急卡内容 */
+@media print {
+  .site-header, header, nav, .tabs, footer,
+  .sos-fab, .em-call-bar, .no-print { display: none !important; }
+  #sos { display: block !important; }
+  .view { display: none !important; }
+  #sos .panel { break-inside: avoid; border: 1px solid #000; }
+  .sos-alert {
+    background: #fff !important; color: #000 !important;
+    border: 2px solid #000 !important; border-left-width: 6px !important;
+  }
+  .sos-alert-title, .sos-alert-chant span, .sos-alert-sub, .sos-alert-note {
+    color: #000 !important; background: none !important;
+  }
+  .sos-alert-chant span { border: 2px solid #000 !important; }
+  .emergency-card { border: 1.5px solid #000 !important; break-inside: avoid; }
+  body { background: #fff !important; }
 }
 /* ===== V16 TIERS END ===== */
 

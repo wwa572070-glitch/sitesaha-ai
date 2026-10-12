@@ -736,6 +736,13 @@
 
     /* §6 全站 SOS 浮动按钮：优先走 SPA 切换，避免整页刷新；
        href="?view=sos" 作为 JS 未加载时的兜底。 */
+    /* §4 应急卡打印（第 20 轮） */
+    (function bindSosPrint() {
+      var button = $("sosPrint");
+      if (!button) return;
+      button.addEventListener("click", function () { window.print(); });
+    })();
+
     (function bindSosFab() {
       var fab = $("sosFab");
       if (!fab) return;
