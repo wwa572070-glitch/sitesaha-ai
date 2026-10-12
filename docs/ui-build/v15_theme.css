@@ -277,7 +277,7 @@ main { max-width:1024px; padding:28px 16px 56px; }
 .action-card.is-primary p { color:var(--i400); }
 .action-card.is-primary .action-ico { background:var(--safety); }
 .action-card.is-primary::before { background:var(--signal); }
-.action-card.is-danger { background:var(--surface); border-color:#f0c4bc; }
+.action-card.is-danger { background:var(--surface); border-color:var(--danger-100); }
 .action-card.is-danger::before { background:var(--red); }
 .action-card.is-danger strong { color:var(--red); }
 .action-card.is-danger .action-ico { background:var(--red-bg); }

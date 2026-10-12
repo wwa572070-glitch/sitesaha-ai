@@ -131,7 +131,7 @@
 [data-theme="dark"] mark.hit { background:#4a3a10; color:#ffe9b0; }
 
 /* 会话 */
-[data-theme="dark"] .avatar { background:#3a434e; color:#ffffff; }
+[data-theme="dark"] .avatar { background:#3a434e; color:var(--surface); }
 [data-theme="dark"] .msg-row.from-user .avatar { background:var(--safety); color:#1a0d05; }
 [data-theme="dark"] .bubble { background:var(--i50); border-color:var(--i200); }
 [data-theme="dark"] .msg-row.from-user .bubble { background:#3a2317; border-color:#4d2f1e; }

@@ -2019,6 +2019,11 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -2528,7 +2533,7 @@ main { max-width:1024px; padding:28px 16px 56px; }
 .action-card.is-primary p { color:var(--i400); }
 .action-card.is-primary .action-ico { background:var(--safety); }
 .action-card.is-primary::before { background:var(--signal); }
-.action-card.is-danger { background:var(--surface); border-color:#f0c4bc; }
+.action-card.is-danger { background:var(--surface); border-color:var(--danger-100); }
 .action-card.is-danger::before { background:var(--red); }
 .action-card.is-danger strong { color:var(--red); }
 .action-card.is-danger .action-ico { background:var(--red-bg); }
@@ -2909,7 +2914,7 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 [data-theme="dark"] mark.hit { background:#4a3a10; color:#ffe9b0; }
 
 /* 会话 */
-[data-theme="dark"] .avatar { background:#3a434e; color:#ffffff; }
+[data-theme="dark"] .avatar { background:#3a434e; color:var(--surface); }
 [data-theme="dark"] .msg-row.from-user .avatar { background:var(--safety); color:#1a0d05; }
 [data-theme="dark"] .bubble { background:var(--i50); border-color:var(--i200); }
 [data-theme="dark"] .msg-row.from-user .bubble { background:#3a2317; border-color:#4d2f1e; }
@@ -3115,7 +3120,7 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 }
 
 /* L1 里的紧急求助入口：红字提示但仍是次级按钮 */
-.ghost-button.is-emergency-link { color: var(--red); border-color: #f0c4bc; }
+.ghost-button.is-emergency-link { color: var(--red); border-color: var(--danger-100); }
 .ghost-button.is-emergency-link:hover { background: var(--red-bg); border-color: var(--red); }
 
 /* L1 里的工种 chips（横排内联） */
@@ -3209,7 +3214,7 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 }
 .status-badge.is-active { color: #14532d; background: var(--green-bg); border-color: #b7dfc6; }
 .status-badge.is-soon { color: #7a4a06; background: var(--amber-bg); border-color: #ecd9a8; }
-.status-badge.is-dead { color: #8f2110; background: var(--red-bg); border-color: #f0c4bc; }
+.status-badge.is-dead { color: #8f2110; background: var(--red-bg); border-color: var(--danger-100); }
 .status-badge::before {
   content: ""; width: 6px; height: 6px; border-radius: 50%;
   background: currentColor; flex: 0 0 6px;
@@ -3532,7 +3537,7 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   background: linear-gradient(135deg, #b3261e 0%, #8f1d17 100%);
   color: #fff; border-radius: var(--r-lg);
   padding: 20px 24px; margin-bottom: 20px;
-  border-left: 5px solid #f2a33c;
+  border-left: 5px solid var(--accent);
 }
 .sos-alert-main { display: flex; align-items: flex-start; gap: 16px; }
 .sos-alert-main > .ico { flex: 0 0 auto; margin-top: 2px; color: #ffd9a0; }
