@@ -49,7 +49,8 @@ def _check(full: str) -> int:
 
     # JS 里 $("xxx") 引用的 id 必须真实存在，避免空指针式静默失败。
     # 例外：运行时才插入 DOM 的节点。
-    runtime_ids = {"chatThinking", "quizNext"}
+    # 运行时才插入 DOM 的节点（由脚本 createElement 后设置 id）
+    runtime_ids = {"chatThinking", "chatThinkingHint", "quizNext"}
     referenced = sorted(set(re.findall(r'\$\("([A-Za-z][\w-]*)"\)', full)))
     missing = [
         name for name in referenced

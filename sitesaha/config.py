@@ -57,7 +57,7 @@ class AppConfig:
         PROJECT_ROOT / "data" / "sources" / "normalized"
     )
     top_k: int = 5
-    max_context_chars: int = 9000
+    max_context_chars: int = 4200
     llm_mode: str = "auto"
     llm_base_url: str = ""
     llm_model: str = "deepseek-chat"
@@ -139,7 +139,7 @@ class AppConfig:
             normalized_sources_dir=normalized_sources_dir,
             top_k=max(1, min(_env_int("SITESHAHA_TOP_K", 5), 12)),
             max_context_chars=max(
-                1000, min(_env_int("SITESHAHA_MAX_CONTEXT_CHARS", 9000), 24000)
+                1000, min(_env_int("SITESHAHA_MAX_CONTEXT_CHARS", 4200), 24000)
             ),
             llm_mode=mode,
             llm_base_url=llm_base_url,

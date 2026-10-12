@@ -224,7 +224,7 @@ class LocalModelClient:
             "model": model,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
             "temperature": 0.1,
-            "max_tokens": 650,
+            "max_tokens": 420,
         }
         result = self._post("/chat/completions", payload)
         try:
@@ -417,9 +417,14 @@ class LocalModelClient:
 
         context_parts: list[str] = []
         used_chars = 0
+        # 单条截断：检索片段常 700~900 字符，5 条就 4000+ 字符的输入，
+        # 而规范条文的关键信息通常在前半段。截断能显著缩短生成时间，
+        # 对答案质量影响很小（实测对比过）。
+        per_source_limit = 600
         for index, source in enumerate(sources, start=1):
             heading = f" / {source.heading}" if source.heading else ""
-            item = f"[{index}] {source.title}{heading}\n来源：{source.source} {source.version}\n{source.content}"
+            body = (source.content or "")[:per_source_limit]
+            item = f"[{index}] {source.title}{heading}\n来源：{source.source} {source.version}\n{body}"
             if used_chars + len(item) > self.config.max_context_chars:
                 break
             context_parts.append(item)
@@ -434,7 +439,7 @@ class LocalModelClient:
 严格规则：
 1. 只使用参考资料中的事实，不编造条款号、数值、处罚、设备参数或项目制度。
 2. 国家/行业标准、项目制度、培训摘要发生冲突时，明确提示以适用且最新的项目制度和现场安全交底为准；不要自行裁决未给出的具体要求。
-3. 回答先给结论，再给“马上怎么做”，再给“不要做什么”，最后给依据编号。[1][2]。可以使用“你可以这样做”“先别急”“如果你不确定”等自然表达。
+3. 回答先给结论，再给“马上怎么做”，再给“不要做什么”。依据编号只在确实对应资料时才标（如 [1]）；对应不上就不标，不要为了凑编号而延伸。可以使用“你可以这样做”“先别急”等自然表达。
 4. 操作问题优先使用步骤化语言；新人不懂术语时，用通俗解释并保留必要专业名称。
 5. 只要涉及高处、吊装、临电、基坑、脚手架、动火、受限空间、机械异常等高风险作业，明确“未经交底/授权不要擅自操作”。
 6. 遇到触电、火灾、坍塌、坠落、重伤等疑似紧急情况：先停止危险行为、撤离/隔离危险区域、呼救并按项目应急流程处置；不要指导未受训人员进行危险施救。

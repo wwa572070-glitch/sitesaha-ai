@@ -918,3 +918,12 @@
 }
 .source-excerpt.is-empty { color: var(--i400); font-style: normal; }
 .source-list { margin-top: 12px; }
+
+/* ==========================================================================
+   等待提示（第 20 轮 §2）
+   ========================================================================== */
+.thinking-hint {
+  margin-top: 8px; font-size: var(--fs-xs); color: var(--i500);
+  font-variant-numeric: tabular-nums;
+}
+.thinking-hint.is-slow { color: var(--risk-mid-text); font-weight: 700; }

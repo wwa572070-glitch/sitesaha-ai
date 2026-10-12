@@ -32,6 +32,40 @@
 
 
 
+    /* 等待期间的计时器句柄（第 20 轮 §2：让用户知道要等多久） */
+
+    var thinkingTimer = null;
+
+    var thinkingStartedAt = 0;
+
+    var ASK_TIMEOUT_MS = 45000;
+
+
+
+    function updateThinkingHint() {
+
+      var hint = $("chatThinkingHint");
+
+      if (!hint) return;
+
+      var seconds = Math.round((Date.now() - thinkingStartedAt) / 1000);
+
+      if (seconds < 20) {
+
+        hint.textContent = "通常需要 10~20 秒 · 已等待 " + seconds + " 秒";
+
+      } else {
+
+        hint.textContent = "网络可能较慢，仍在生成… 已等待 " + seconds + " 秒";
+
+      }
+
+      hint.classList.toggle("is-slow", seconds >= 20);
+
+    }
+
+
+
     function appendThinking() {
 
       var stream = $("chatStream");
@@ -58,11 +92,27 @@
 
       bubble.appendChild(dots);
 
+      /* 预期时长 + 实时计时，避免用户以为卡死 */
+
+      var hint = make("div", "thinking-hint");
+
+      hint.id = "chatThinkingHint";
+
+      hint.textContent = "通常需要 10~20 秒 · 已等待 0 秒";
+
+      bubble.appendChild(hint);
+
       row.appendChild(bubble);
 
       stream.appendChild(row);
 
       row.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      thinkingStartedAt = Date.now();
+
+      if (thinkingTimer) clearInterval(thinkingTimer);
+
+      thinkingTimer = setInterval(updateThinkingHint, 1000);
 
       return row;
 
@@ -71,6 +121,8 @@
 
 
     function removeThinking() {
+
+      if (thinkingTimer) { clearInterval(thinkingTimer); thinkingTimer = null; }
 
       var node = $("chatThinking");
 
@@ -285,6 +337,9 @@
 
       row.scrollIntoView({ behavior: "smooth", block: "start" });
 
+      /* 返回气泡，便于调用方追加内容（如超时后的重试按钮） */
+      return bubble;
+
     }
 
 
@@ -319,21 +374,39 @@
 
         if (role) payload.worker_role = role;
 
-        var response = await apiFetch("/api/ask", {
+        /* 45 秒超时：到点主动中止，不让用户无限等 */
 
-          method: "POST",
+        var controller = new AbortController();
 
-          headers: {
+        var timeoutId = setTimeout(function () { controller.abort(); }, ASK_TIMEOUT_MS);
 
-            "Content-Type": "application/json",
+        var response;
 
-            "X-Access-Code": accessCode(),
+        try {
 
-          },
+          response = await apiFetch("/api/ask", {
 
-          body: JSON.stringify(payload),
+            method: "POST",
 
-        });
+            headers: {
+
+              "Content-Type": "application/json",
+
+              "X-Access-Code": accessCode(),
+
+            },
+
+            body: JSON.stringify(payload),
+
+            signal: controller.signal,
+
+          });
+
+        } finally {
+
+          clearTimeout(timeoutId);
+
+        }
 
         removeThinking();
 
@@ -355,9 +428,21 @@
 
         removeThinking();
 
-        appendAnswer(question, {
+        var waited = Math.round((Date.now() - thinkingStartedAt) / 1000);
 
-          text: "查询失败，请稍后重试或联系管理员。已保留你的问题，可以再试一次。",
+        var aborted = error && (error.name === "AbortError" || error.code === 20);
+
+        var failText = aborted
+
+          ? ("这次没等到结果（已等待 " + waited + " 秒）。可能是网络较慢或模型繁忙，"
+
+             + "你的问题还在下面，点一下就能原样重试。")
+
+          : "查询失败，请稍后重试或联系管理员。已保留你的问题，可以再试一次。";
+
+        var failBox = appendAnswer(question, {
+
+          text: failText,
 
           mode: "error",
 
@@ -366,6 +451,18 @@
           sources: [],
 
         }, role);
+
+        /* 重试按钮：复用原问题，不丢输入 */
+        if (failBox) {
+          var retryButton = make("button", "secondary-button ico-button", "重试这个问题");
+          retryButton.type = "button";
+          retryButton.addEventListener("click", function () {
+            var box = $("question");
+            if (box) box.value = question;
+            askQuestion();
+          });
+          failBox.appendChild(retryButton);
+        }
 
       } finally {
 
