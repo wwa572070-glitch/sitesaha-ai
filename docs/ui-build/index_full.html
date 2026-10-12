@@ -2064,6 +2064,21 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -4247,6 +4262,11 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 /* 工作台主按钮：识别是唯一的主操作 */
 .workbench-primary {
   min-height: 44px; font-size: var(--fs-base); font-weight: 800;
+  border: 2px solid var(--accent); color: var(--risk-mid-text);
+  background: var(--accent-050);
+}
+.workbench-primary:hover {
+  background: var(--accent-100); border-color: var(--accent-600); color: var(--risk-mid-text);
 }
 
 /* 图片预览：成为主角，不被卡片挤压 */
@@ -4262,6 +4282,78 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   .dropzone-art { width: 40px; height: 40px; }
   .dropzone-title { font-size: var(--fs-base); }
   .photo-stage > img { max-height: 300px; }
+}
+
+/* ==========================================================================
+   第 24 轮 A · 识别结果结构化渲染
+   --------------------------------------------------------------------------
+   后端一直返回 structured，前端却只显示纯文本。这里按真实字段分四段呈现：
+   结论 / 风险位置与现象 / 整改建议 / 待确认，并保留免责声明。
+   ========================================================================== */
+.ins-result { display: flex; flex-direction: column; gap: 16px; }
+.ins-block {
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: var(--surface); padding: 16px;
+}
+.ins-block-title {
+  margin: 0 0 12px; font-size: var(--fs-md); font-weight: 800; color: var(--brand);
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* A 结论 */
+.ins-summary { background: var(--brand-050); border-color: var(--brand-100); }
+.ins-worktype { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.ins-worktype-label {
+  flex: 0 0 auto; padding: 2px 8px; border-radius: var(--r-sm);
+  background: var(--brand); color: #fff; font-size: var(--fs-xs); font-weight: 800;
+}
+.ins-worktype-value { font-size: var(--fs-base); font-weight: 800; color: var(--i900); }
+.ins-worktype.is-empty { font-size: var(--fs-sm); color: var(--i600); line-height: 1.7; }
+.ins-metric { margin-top: 12px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.ins-metric-num {
+  font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--brand);
+  line-height: 1;
+}
+.ins-metric-unit { font-size: var(--fs-sm); color: var(--i600); }
+.ins-metric-note {
+  padding: 2px 8px; border-radius: var(--r-sm);
+  background: var(--accent-100); color: var(--risk-mid-text);
+  font-size: var(--fs-xs); font-weight: 800;
+}
+
+/* B 风险条目 */
+.ins-risk-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.ins-risk {
+  border-left: 4px solid var(--risk-mid); border-radius: var(--r-sm);
+  background: var(--surface-soft); padding: 12px 16px;
+}
+.ins-risk-where {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--fs-xs); font-weight: 800; color: var(--brand-600);
+  background: var(--brand-050); border-radius: var(--r-sm);
+  padding: 2px 8px; margin-bottom: 8px;
+}
+.ins-risk-what { margin: 0; font-size: var(--fs-base); line-height: 1.7; color: var(--i800); }
+.ins-risk-action {
+  display: flex; align-items: flex-start; gap: 6px;
+  margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line);
+  font-size: var(--fs-sm); line-height: 1.7; color: var(--risk-low-text);
+}
+.ins-note { margin: 12px 0 0; font-size: var(--fs-xs); line-height: 1.7; color: var(--i600); }
+.ins-clean { border-left: 4px solid var(--risk-low); }
+.ins-pending { border-left: 4px solid var(--risk-mid); background: var(--risk-mid-bg); }
+.ins-pending-list {
+  margin: 0; padding-left: 20px;
+  font-size: var(--fs-sm); line-height: 1.7; color: var(--i700);
+}
+.ins-disclaimer {
+  margin: 0; padding: 12px 16px; border-radius: var(--r-sm);
+  background: var(--i100); font-size: var(--fs-xs); line-height: 1.7; color: var(--i600);
+}
+
+@media (max-width: 640px) {
+  .ins-block { padding: 12px; }
+  .ins-metric-num { font-size: 27px; }
 }
 /* ===== V16 TIERS END ===== */
 
@@ -10264,6 +10356,262 @@ input.is-suspect {
 
 
 
+    /* ==================================================================
+
+       第 24 轮 A：识别结果结构化渲染
+
+       ------------------------------------------------------------------
+
+       后端一直返回 structured，但前端只用了 text，结构化数据全被浪费。
+
+       这里按真实字段分四段渲染：
+
+
+
+         A 作业场景与风险结论   work_type + 真实风险条数
+
+         B 图片证据与风险位置   risks[].where（位置）+ risks[].what（现象）
+
+         C 整改建议             risks[].action（关联关系来自数据本身）
+
+         D 待确认信息           uncertain[]
+
+
+
+       容错：structured 不可用就回退到原始文本，绝不让结果区崩掉。
+
+       不伪造坐标、置信度、检测框或任何后端没给的字段。
+
+       ================================================================== */
+
+    function isNonEmptyString(value) {
+
+      return typeof value === "string" && value.trim().length > 0;
+
+    }
+
+
+
+    function renderPhotoResult(payload, host) {
+
+      var data = payload && payload.structured;
+
+      if (!data || typeof data !== "object") return false;
+
+
+
+      var risks = Array.isArray(data.risks) ? data.risks.filter(function (item) {
+
+        return item && (isNonEmptyString(item.what) || isNonEmptyString(item.where));
+
+      }) : [];
+
+      var uncertain = Array.isArray(data.uncertain) ? data.uncertain.filter(isNonEmptyString) : [];
+
+      var actions = risks.filter(function (item) { return isNonEmptyString(item.action); });
+
+      var workType = isNonEmptyString(data.work_type) ? data.work_type.trim() : "";
+
+
+
+      /* 三段全空 —— 如实说明，不硬凑 */
+
+      if (!workType && !risks.length && !uncertain.length) return false;
+
+
+
+      var wrap = make("div", "ins-result");
+
+
+
+      /* ---- A 作业场景与风险结论 ---- */
+
+      var head = make("section", "ins-block ins-summary");
+
+      head.appendChild(make("h3", "ins-block-title", "识别结论"));
+
+      if (workType) {
+
+        var wt = make("p", "ins-worktype");
+
+        wt.appendChild(make("span", "ins-worktype-label", "作业场景"));
+
+        wt.appendChild(make("span", "ins-worktype-value", workType));
+
+        head.appendChild(wt);
+
+      } else {
+
+        head.appendChild(make("p", "ins-worktype is-empty",
+
+          "未能从这张照片确定作业场景。请把作业面、防护设施和周边环境一起拍进去。"));
+
+      }
+
+      var metric = make("div", "ins-metric");
+
+      metric.appendChild(make("span", "ins-metric-num", String(risks.length)));
+
+      metric.appendChild(make("span", "ins-metric-unit", "条可见风险"));
+
+      if (uncertain.length) {
+
+        metric.appendChild(make("span", "ins-metric-note",
+
+          "另有 " + uncertain.length + " 项待确认"));
+
+      }
+
+      head.appendChild(metric);
+
+      wrap.appendChild(head);
+
+
+
+      /* ---- B 图片证据与风险位置 ---- */
+
+      if (risks.length) {
+
+        var section = make("section", "ins-block");
+
+        section.appendChild(make("h3", "ins-block-title",
+
+          "风险位置与现象（" + risks.length + " 条）"));
+
+        var list = make("ol", "ins-risk-list");
+
+        risks.forEach(function (item) {
+
+          var row = make("li", "ins-risk");
+
+          if (isNonEmptyString(item.where)) {
+
+            /* 位置标签：模型给的是画面方位描述，如实展示，不换算成坐标 */
+
+            var where = make("span", "ins-risk-where");
+
+            where.appendChild(makeIcon("i-search", "ico ico-sm"));
+
+            where.appendChild(document.createTextNode(item.where));
+
+            row.appendChild(where);
+
+          }
+
+          row.appendChild(make("p", "ins-risk-what",
+
+            isNonEmptyString(item.what) ? item.what : "（这一条没有文字描述）"));
+
+          /* C 整改建议紧跟在对应风险下 —— 关联关系来自数据本身 */
+
+          if (isNonEmptyString(item.action)) {
+
+            var fix = make("div", "ins-risk-action");
+
+            fix.appendChild(makeIcon("i-check", "ico ico-sm"));
+
+            var fixText = make("span");
+
+            fixText.appendChild(make("b", "", "立即动作："));
+
+            fixText.appendChild(document.createTextNode(item.action));
+
+            fix.appendChild(fixText);
+
+            row.appendChild(fix);
+
+          }
+
+          list.appendChild(row);
+
+        });
+
+        section.appendChild(list);
+
+        if (!actions.length) {
+
+          section.appendChild(make("p", "ins-note",
+
+            "这张照片的识别结果没有给出逐条整改动作，请以现场安全交底和项目制度为准。"));
+
+        }
+
+        wrap.appendChild(section);
+
+      } else {
+
+        var clean = make("section", "ins-block ins-clean");
+
+        clean.appendChild(make("h3", "ins-block-title", "未识别到可报告的风险"));
+
+        clean.appendChild(make("p", "ins-note",
+
+          "这不代表现场安全。换个角度多拍几张，或请现场安全员确认。"));
+
+        wrap.appendChild(clean);
+
+      }
+
+
+
+      /* ---- D 待确认信息 ---- */
+
+      if (uncertain.length) {
+
+        var pending = make("section", "ins-block ins-pending");
+
+        var title = make("h3", "ins-block-title");
+
+        title.appendChild(makeIcon("i-alert", "ico ico-sm"));
+
+        title.appendChild(document.createTextNode("待确认（" + uncertain.length + " 项）"));
+
+        pending.appendChild(title);
+
+        var ul = make("ul", "ins-pending-list");
+
+        uncertain.forEach(function (text) { ul.appendChild(make("li", "", text)); });
+
+        pending.appendChild(ul);
+
+        pending.appendChild(make("p", "ins-note",
+
+          "以上内容模型无法确认，需要你补充现场信息或请安全员人工复核。"));
+
+        wrap.appendChild(pending);
+
+      }
+
+
+
+      /* ---- 免责声明（与页面既有口径一致） ---- */
+
+      wrap.appendChild(make("p", "ins-disclaimer",
+
+        "本结果仅辅助识别照片中肉眼可见的风险，不替代现场安全员检查，也不证明现场完全合规。"));
+
+
+
+      /* 服务端告警（如模型降级）如实透出 */
+
+      (payload.warnings || []).forEach(function (warning) {
+
+        wrap.appendChild(makeIconText("div", "warn-box", "i-alert", "ico ico-sm", warning));
+
+      });
+
+
+
+      host.textContent = "";
+
+      host.appendChild(wrap);
+
+      return true;
+
+    }
+
+
+
     async function inspectPhoto() {
 
       var button = $("photoButton");
@@ -10322,21 +10670,29 @@ input.is-suspect {
 
         setPhotoProgress(100);
 
-        var text = payload.text || "";
+        /* 优先结构化渲染；structured 不可用时回退到原始文本 */
 
-        (payload.warnings || []).forEach(function (warning) { text += NL2 + "⚠ " + warning; });
+        result.textContent = "";
 
-        if (payload.sources && payload.sources.length) {
+        if (!renderPhotoResult(payload, result)) {
 
-          text += NL2 + "参考依据：" + payload.sources.slice(0, 3).map(function (item) {
+          var text = payload.text || "";
 
-            return item.title;
+          (payload.warnings || []).forEach(function (warning) { text += NL2 + "⚠ " + warning; });
 
-          }).join("；");
+          if (payload.sources && payload.sources.length) {
+
+            text += NL2 + "参考依据：" + payload.sources.slice(0, 3).map(function (item) {
+
+              return item.title;
+
+            }).join("；");
+
+          }
+
+          result.textContent = text || "服务端没有返回内容。";
 
         }
-
-        result.textContent = text || "服务端没有返回内容。";
 
       } catch (error) {
 
@@ -10350,7 +10706,7 @@ input.is-suspect {
 
         button.disabled = false;
 
-        button.textContent = "分析照片";
+        button.textContent = "开始识别风险";
 
         if (photoProgress) photoProgress.hidden = true;
 

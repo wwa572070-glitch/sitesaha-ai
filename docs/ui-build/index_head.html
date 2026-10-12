@@ -2064,6 +2064,21 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -4247,6 +4262,11 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 /* 工作台主按钮：识别是唯一的主操作 */
 .workbench-primary {
   min-height: 44px; font-size: var(--fs-base); font-weight: 800;
+  border: 2px solid var(--accent); color: var(--risk-mid-text);
+  background: var(--accent-050);
+}
+.workbench-primary:hover {
+  background: var(--accent-100); border-color: var(--accent-600); color: var(--risk-mid-text);
 }
 
 /* 图片预览：成为主角，不被卡片挤压 */
@@ -4262,6 +4282,78 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   .dropzone-art { width: 40px; height: 40px; }
   .dropzone-title { font-size: var(--fs-base); }
   .photo-stage > img { max-height: 300px; }
+}
+
+/* ==========================================================================
+   第 24 轮 A · 识别结果结构化渲染
+   --------------------------------------------------------------------------
+   后端一直返回 structured，前端却只显示纯文本。这里按真实字段分四段呈现：
+   结论 / 风险位置与现象 / 整改建议 / 待确认，并保留免责声明。
+   ========================================================================== */
+.ins-result { display: flex; flex-direction: column; gap: 16px; }
+.ins-block {
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: var(--surface); padding: 16px;
+}
+.ins-block-title {
+  margin: 0 0 12px; font-size: var(--fs-md); font-weight: 800; color: var(--brand);
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* A 结论 */
+.ins-summary { background: var(--brand-050); border-color: var(--brand-100); }
+.ins-worktype { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.ins-worktype-label {
+  flex: 0 0 auto; padding: 2px 8px; border-radius: var(--r-sm);
+  background: var(--brand); color: #fff; font-size: var(--fs-xs); font-weight: 800;
+}
+.ins-worktype-value { font-size: var(--fs-base); font-weight: 800; color: var(--i900); }
+.ins-worktype.is-empty { font-size: var(--fs-sm); color: var(--i600); line-height: 1.7; }
+.ins-metric { margin-top: 12px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.ins-metric-num {
+  font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--brand);
+  line-height: 1;
+}
+.ins-metric-unit { font-size: var(--fs-sm); color: var(--i600); }
+.ins-metric-note {
+  padding: 2px 8px; border-radius: var(--r-sm);
+  background: var(--accent-100); color: var(--risk-mid-text);
+  font-size: var(--fs-xs); font-weight: 800;
+}
+
+/* B 风险条目 */
+.ins-risk-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.ins-risk {
+  border-left: 4px solid var(--risk-mid); border-radius: var(--r-sm);
+  background: var(--surface-soft); padding: 12px 16px;
+}
+.ins-risk-where {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--fs-xs); font-weight: 800; color: var(--brand-600);
+  background: var(--brand-050); border-radius: var(--r-sm);
+  padding: 2px 8px; margin-bottom: 8px;
+}
+.ins-risk-what { margin: 0; font-size: var(--fs-base); line-height: 1.7; color: var(--i800); }
+.ins-risk-action {
+  display: flex; align-items: flex-start; gap: 6px;
+  margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line);
+  font-size: var(--fs-sm); line-height: 1.7; color: var(--risk-low-text);
+}
+.ins-note { margin: 12px 0 0; font-size: var(--fs-xs); line-height: 1.7; color: var(--i600); }
+.ins-clean { border-left: 4px solid var(--risk-low); }
+.ins-pending { border-left: 4px solid var(--risk-mid); background: var(--risk-mid-bg); }
+.ins-pending-list {
+  margin: 0; padding-left: 20px;
+  font-size: var(--fs-sm); line-height: 1.7; color: var(--i700);
+}
+.ins-disclaimer {
+  margin: 0; padding: 12px 16px; border-radius: var(--r-sm);
+  background: var(--i100); font-size: var(--fs-xs); line-height: 1.7; color: var(--i600);
+}
+
+@media (max-width: 640px) {
+  .ins-block { padding: 12px; }
+  .ins-metric-num { font-size: 27px; }
 }
 /* ===== V16 TIERS END ===== */
 
