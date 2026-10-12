@@ -893,3 +893,28 @@
 .answer-body .answer-list { margin: 0 0 8px; padding-left: 20px; }
 .answer-body .answer-list li { margin-bottom: 4px; line-height: 1.75; }
 .answer-body .answer-list li strong { color: var(--i900); font-weight: 800; }
+
+/* ==========================================================================
+   规范依据区（§16 线上乱码修复）
+   --------------------------------------------------------------------------
+   原来把整段检索原文倒出来，JGJ59 的评分表碎片淹没了答案。
+   现在收进 details 默认收起，正文只给清理后的预览。
+   ========================================================================== */
+.src-details { margin-top: 4px; }
+.src-details > summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px;
+}
+.src-details > summary::-webkit-details-marker { display: none; }
+.src-details > summary::before {
+  content: ""; width: 0; height: 0; flex: 0 0 auto;
+  border-left: 5px solid currentColor;
+  border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+  transition: transform .15s ease;
+}
+.src-details[open] > summary::before { transform: rotate(90deg); }
+.source-excerpt {
+  font-size: var(--fs-sm); line-height: 1.75; color: var(--i600);
+  max-width: 42em;
+}
+.source-excerpt.is-empty { color: var(--i400); font-style: normal; }
+.source-list { margin-top: 12px; }
