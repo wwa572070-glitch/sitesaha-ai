@@ -1999,6 +1999,11 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -3885,6 +3890,41 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   font-variant-numeric: tabular-nums;
 }
 .thinking-hint.is-slow { color: var(--risk-mid-text); font-weight: 700; }
+
+/* ==========================================================================
+   §3 渐进披露（第 20 轮）
+   --------------------------------------------------------------------------
+   手机端页面过长：首页 3310px、班前 5129px、学习资料 6000px。
+   用原生 details 收起次要内容，首屏只留主任务。
+   ========================================================================== */
+.disclosure {
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: var(--surface); margin-top: 16px; overflow: hidden;
+}
+.disclosure > summary {
+  cursor: pointer; list-style: none; padding: 14px 16px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  font-size: var(--fs-md); font-weight: 800; color: var(--i800);
+}
+.disclosure > summary::-webkit-details-marker { display: none; }
+.disclosure > summary::before {
+  content: ""; width: 0; height: 0; flex: 0 0 auto;
+  border-left: 6px solid currentColor;
+  border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  transition: transform .15s ease;
+}
+.disclosure[open] > summary::before { transform: rotate(90deg); }
+.disclosure > summary:hover { color: var(--brand); }
+.disclosure-hint {
+  margin-left: auto; font-size: var(--fs-xs); font-weight: 400; color: var(--i500);
+}
+.disclosure-body { padding: 0 16px 16px; }
+
+/* 手机端：折叠区更省空间 */
+@media (max-width: 640px) {
+  .disclosure > summary { padding: 12px; font-size: var(--fs-base); }
+  .disclosure-body { padding: 0 12px 12px; }
+}
 /* ===== V16 TIERS END ===== */
 
 /* ===== V17 PALETTE BEGIN ===== */
@@ -5169,7 +5209,10 @@ input.is-suspect {
       </div>
 
       <!-- ============ L4 内容卡：每日警示案例 ============ -->
-      <div class="tier-l4">
+      <details class="disclosure">
+  <summary>安全底线（三条，必读）<span class="disclosure-hint">展开看全部</span></summary>
+  <div class="disclosure-body">
+<div class="tier-l4">
         <div class="l4-head">
           <svg class="ico" aria-hidden="true"><use href="#i-alert"/></svg>
           <h2>每日警示案例</h2>
@@ -5179,6 +5222,8 @@ input.is-suspect {
           <div class="tier-skeleton" style="height:74px"></div>
         </div>
       </div>
+  </div>
+</details>
 
       <!-- ============ L5 引用块：安全底线（6 条必须保留） ============ -->
       <div class="tier-l4">
@@ -5672,6 +5717,9 @@ input.is-suspect {
 
       </div>
 
+<details class="disclosure">
+  <summary>标准现行状态<span class="disclosure-hint">46 部 · 现行 / 即将实施</span></summary>
+  <div class="disclosure-body">
 <div class="panel" id="standardsPanel">
 
         <div class="panel-head">
@@ -5709,7 +5757,12 @@ input.is-suspect {
         </div>
 
       </div>
+  </div>
+</details>
 
+<details class="disclosure">
+  <summary>在线模型与培训上下文<span class="disclosure-hint">技术信息</span></summary>
+  <div class="disclosure-body">
 <div class="panel">
 
         <div class="panel-head"><h2>在线模型与培训上下文</h2></div>
@@ -5739,7 +5792,12 @@ input.is-suspect {
         </div>
 
       </div>
+  </div>
+</details>
 
+<details class="disclosure">
+  <summary>知识库状态<span class="disclosure-hint">文档 / 片段 / 服务</span></summary>
+  <div class="disclosure-body">
 <div class="panel">
   <div class="panel-head"><h2>知识库状态</h2><span class="head-spacer"></span><span class="head-note">服务端实时统计</span></div>
   <div class="panel-body">
@@ -5752,6 +5810,8 @@ input.is-suspect {
     <p class="lead" id="kbNote">正在读取服务端知识库…</p>
   </div>
 </div>
+  </div>
+</details>
 
 <details class="kb-sub">
   <summary>已入库文档 / 领域分布 / 最近入库 / 服务状态</summary>
@@ -5857,6 +5917,9 @@ input.is-suspect {
   </div>
 </details>
 
+<details class="disclosure">
+  <summary>检索与合规说明<span class="disclosure-hint">使用边界</span></summary>
+  <div class="disclosure-body">
 <div class="panel">
 
         <div class="panel-head"><h2>检索与合规说明</h2></div>
@@ -5882,6 +5945,8 @@ input.is-suspect {
         </div>
 
       </div>
+  </div>
+</details>
 
     </section>
 
@@ -5970,7 +6035,10 @@ input.is-suspect {
 
 <div class="panel">
 
-        <div class="panel-head">
+        <details class="disclosure">
+  <summary>检查项目索引（参考，不代替标准检查表）<span class="disclosure-hint">9 类 · 按 JGJ 59-2011 整理</span></summary>
+  <div class="disclosure-body">
+<div class="panel-head">
 
           <h2>检查项目索引</h2>
 
@@ -5979,6 +6047,8 @@ input.is-suspect {
           <span class="head-note">JGJ 59-2011 场景索引 · 9 类</span>
 
         </div>
+  </div>
+</details>
 
         <div class="panel-body">
 

@@ -1999,6 +1999,11 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -3885,6 +3890,41 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   font-variant-numeric: tabular-nums;
 }
 .thinking-hint.is-slow { color: var(--risk-mid-text); font-weight: 700; }
+
+/* ==========================================================================
+   §3 渐进披露（第 20 轮）
+   --------------------------------------------------------------------------
+   手机端页面过长：首页 3310px、班前 5129px、学习资料 6000px。
+   用原生 details 收起次要内容，首屏只留主任务。
+   ========================================================================== */
+.disclosure {
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  background: var(--surface); margin-top: 16px; overflow: hidden;
+}
+.disclosure > summary {
+  cursor: pointer; list-style: none; padding: 14px 16px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  font-size: var(--fs-md); font-weight: 800; color: var(--i800);
+}
+.disclosure > summary::-webkit-details-marker { display: none; }
+.disclosure > summary::before {
+  content: ""; width: 0; height: 0; flex: 0 0 auto;
+  border-left: 6px solid currentColor;
+  border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  transition: transform .15s ease;
+}
+.disclosure[open] > summary::before { transform: rotate(90deg); }
+.disclosure > summary:hover { color: var(--brand); }
+.disclosure-hint {
+  margin-left: auto; font-size: var(--fs-xs); font-weight: 400; color: var(--i500);
+}
+.disclosure-body { padding: 0 16px 16px; }
+
+/* 手机端：折叠区更省空间 */
+@media (max-width: 640px) {
+  .disclosure > summary { padding: 12px; font-size: var(--fs-base); }
+  .disclosure-body { padding: 0 12px 12px; }
+}
 /* ===== V16 TIERS END ===== */
 
 /* ===== V17 PALETTE BEGIN ===== */
