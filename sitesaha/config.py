@@ -8,6 +8,20 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
+# 被外部环境变量覆盖、因而 .env 未生效的键（诊断用，不记录密钥值）
+ENV_OVERRIDES: dict[str, str] = {}
+
+# 与 AI 能力直接相关的键：这些被覆盖时最危险
+AI_KEYS = (
+    "SITESHAHA_LLM_MODE",
+    "SITESHAHA_LLM_BASE_URL",
+    "SITESHAHA_LLM_API_KEY",
+    "SITESHAHA_VISION_BASE_URL",
+    "SITESHAHA_VISION_API_KEY",
+    "SITESHAHA_VISION_MODEL",
+)
+
+
 def _load_dotenv(path: Path) -> None:
     if not path.is_file():
         return
@@ -27,6 +41,10 @@ def _load_dotenv(path: Path) -> None:
         if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
             value = value[1:-1]
         if name:
+            # 记录「环境变量已存在、因此 .env 没生效」的键。
+            # 这类静默覆盖会让 AI 能力无声关闭，必须能查出来。
+            if name in os.environ and os.environ[name] != value:
+                ENV_OVERRIDES[name] = os.environ[name]
             os.environ.setdefault(name, value)
 
 
@@ -190,6 +208,31 @@ class AppConfig:
     def model_configured(self) -> bool:
         return self.llm_mode != "off" and bool(self.llm_base_url)
 
+    def unavailable_reason(self, feature: str) -> str:
+        """说明某项能力为什么不可用（用于 /healthz 与启动日志）。"""
+        if feature == "model" and self.model_configured:
+            return ""
+        if feature == "vision" and self.vision_configured:
+            return ""
+        if feature == "asr" and self.asr_configured:
+            return ""
+
+        if self.llm_mode == "off":
+            overridden = "SITESHAHA_LLM_MODE" in ENV_OVERRIDES
+            if overridden:
+                return ("模型已关闭，且这个值是**外部环境变量**覆盖 .env 得到的"
+                        "（SITESHAHA_LLM_MODE=" + str(ENV_OVERRIDES.get("SITESHAHA_LLM_MODE"))
+                        + "）。请清除该环境变量后重启。")
+            return "模型已关闭（SITESHAHA_LLM_MODE=off）。"
+
+        base = {"model": self.llm_base_url,
+                "vision": self.vision_base_url or self.llm_base_url}.get(feature, "")
+        if not base:
+            return f"{feature} 未配置服务地址。"
+        if feature == "vision" and not self.vision_model:
+            return "未配置视觉模型名称（SITESHAHA_VISION_MODEL）。"
+        return f"{feature} 配置不完整，请检查 .env 或部署环境变量。"
+
     @property
     def vision_configured(self) -> bool:
         return (
@@ -209,3 +252,29 @@ class AppConfig:
         if not self.asr_base_url:
             return ""
         return self.asr_base_url + self.asr_endpoint_path
+
+
+def _warn_about_disabled_ai(config) -> None:
+    """AI 能力未就绪时打印醒目警告。
+
+    为什么需要：这个失败以前是无声的 —— 页面只显示「未连接模型」，
+    看不出是密钥缺失、被环境变量覆盖，还是模型名写错。
+    本轮排查时就因为环境变量静默覆盖 .env，白找了一圈。
+    """
+    if config.llm_mode != "off" and config.model_configured and config.vision_configured:
+        return
+
+    print("!" * 66)
+    print("警告：AI 能力未全部就绪")
+    for feature in ("model", "vision", "asr"):
+        reason = config.unavailable_reason(feature)
+        if reason:
+            print("  · " + feature + ": " + reason)
+    if ENV_OVERRIDES:
+        print("  以下外部环境变量覆盖了 .env 的同名配置：")
+        for key in AI_KEYS:
+            if key in ENV_OVERRIDES:
+                shown = "***" if "KEY" in key else ENV_OVERRIDES[key]
+                print("    - " + key + " = " + shown)
+        print("  清除这些环境变量后重启，.env 才会生效。")
+    print("!" * 66)

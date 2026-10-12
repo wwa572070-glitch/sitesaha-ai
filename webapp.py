@@ -13311,6 +13311,11 @@ class SiteSahaHandler(BaseHTTPRequestHandler):
 
                     "asr_configured": self.services.config.asr_configured,
 
+                    # 为什么某项不可用 —— 让「静默关闭」可诊断
+                    "model_reason": self.services.config.unavailable_reason("model"),
+
+                    "vision_reason": self.services.config.unavailable_reason("vision"),
+
                 }
 
             )
@@ -13415,6 +13420,11 @@ class SiteSahaHandler(BaseHTTPRequestHandler):
                     "vision_configured": self.services.config.vision_configured,
 
                     "asr_configured": self.services.config.asr_configured,
+
+                    # 为什么某项不可用 —— 让「静默关闭」可诊断
+                    "model_reason": self.services.config.unavailable_reason("model"),
+
+                    "vision_reason": self.services.config.unavailable_reason("vision"),
 
                 }
 
@@ -14229,6 +14239,16 @@ def main() -> int:
     args = parse_args()
 
     services = build_services()
+
+    try:
+
+        from sitesaha.config import _warn_about_disabled_ai
+
+        _warn_about_disabled_ai(services.config)
+
+    except Exception:
+
+        pass
 
     server = SiteSahaServer((args.host, args.port), SiteSahaHandler, services)
 
