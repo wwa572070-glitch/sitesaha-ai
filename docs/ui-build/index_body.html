@@ -315,13 +315,14 @@
     <section id="home" class="view active" aria-label="首页">
 
       <!-- ============ L1 Hero 带：视图开场，一行结论 ============ -->
-      <div class="tier-l1">
+      <div class="tier-l1 hero-split">
+        <div class="hero-copy">
         <div class="l1-kicker">
           <svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>
           新工人入场安全助手
         </div>
-                <h2>上工前，先问一句</h2>
-        <p class="l1-lead">不懂就问。你告诉我<em>准备做什么、看到什么、哪里不确定</em>，我用现场能听懂的话说。回答优先给能立刻执行的动作，再附规范依据和来源。</p>
+                <h2>拍照识别现场安全风险</h2>
+        <p class="l1-lead">把作业面、防护设施和周边环境拍进一张照片，几十秒内得到：<em>识别到的作业场景、可见风险的位置与现象、每条风险的立即动作、以及需要你补充确认的内容</em>。不想拍照也可以直接打字问安全。</p>
         <div class="l1-foot">
           <button class="secondary-button ico-button" data-jump="voice" type="button">
             <svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg>说句话问安全
@@ -336,6 +337,126 @@
           <div id="homeRoleChips" class="role-chips is-inline" role="group" aria-label="选择工种"></div>
         </div>
         <div id="homeRoleHint" class="l1-rolehint">还没有选择工种 —— 未选择时按通用要点回答，选择后会自动带上本工种的主要风险与必守规矩。</div>
+        </div><!-- /hero-copy -->
+
+        <div class="hero-workbench" id="heroWorkbench">
+          <!-- AI 识别工作台：从「问安全」页整体搬来，全站共用一套逻辑 -->
+  <div class="panel">
+
+          <div class="panel-head">
+
+            <h2><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 拍照问安全</h2>
+
+            <span class="head-spacer"></span>
+
+            <span class="head-note">仅辅助识别肉眼可见风险</span>
+
+          </div>
+
+          <div class="panel-body">
+
+            <p class="lead">拍一张现场照片，辅助识别肉眼可见的安全风险。照片不能替代现场安全员检查，也不会证明现场完全合规。</p>
+
+            <!-- ===== AI 识别工作台：上传区（竞赛级改造） ===== -->
+            <div id="photoDropzone" class="dropzone" role="button" tabindex="0"
+                 aria-label="选择或拖放现场照片，支持 JPG PNG WEBP，不超过 8 MB">
+              <svg class="dropzone-art" viewBox="0 0 48 48" aria-hidden="true">
+                <rect x="6" y="14" width="36" height="26" rx="4"/>
+                <circle cx="24" cy="27" r="8"/>
+                <path d="M17 14l2-4h10l2 4"/>
+                <path d="M24 23v8M20 27l4-4 4 4"/>
+              </svg>
+              <div class="dropzone-title">拍照或拖入现场照片</div>
+              <div class="dropzone-sub">点击选择文件，也可以把图片直接拖到这里</div>
+              <div class="dropzone-hint">支持 JPG / PNG / WEBP · 单张不超过 8 MB</div>
+            </div>
+
+            <div class="capture-tools">
+
+              <button id="cameraButton" class="secondary-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 打开摄像头拍照</button>
+
+              <button id="filePickButton" class="secondary-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg> 从相册 / 文件选择</button>
+
+              <button id="captureButton" class="secondary-button" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 拍下这一张</button>
+
+              <button id="cameraStopButton" class="secondary-button" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 关闭摄像头</button>
+
+              <button id="photoRetakeButton" class="secondary-button" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg> 重拍 / 换一张</button>
+
+            </div>
+
+            <input id="sitePhoto" class="sr-only" type="file" accept="image/*" capture="environment"
+
+                   aria-label="选择或拍摄现场照片" />
+
+            <input id="sitePhotoCamera" class="sr-only" type="file" accept="image/*"
+
+                   aria-label="从相册或文件选择现场照片" />
+
+
+
+            <div id="cameraStage" class="camera-stage" hidden>
+
+              <video id="cameraVideo" playsinline muted aria-label="摄像头实时预览"></video>
+
+              <div class="camera-hint" id="cameraHint">把作业面、防护设施和周边环境一起拍进去；光线不足时先补光再拍。</div>
+
+            </div>
+
+
+
+            <div id="photoStage" class="photo-stage" hidden>
+
+              <img id="photoPreview" alt="待分析的现场照片预览" />
+
+              <div class="photo-facts" id="photoFacts"></div>
+
+              <div class="progress-inline" id="photoProgress" hidden>
+
+                <span>上传中</span>
+
+                <span class="bar"><i id="photoProgressBar"></i></span>
+
+                <span id="photoProgressText" class="num">0%</span>
+
+                <button id="photoCancelButton" class="ghost-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg> 取消</button>
+
+              </div>
+
+            </div>
+
+
+
+            <div class="composer-grid" style="margin-top:11px">
+
+              <label class="sr-only" for="photoQuestion">补充说明（可选）</label>
+
+              <textarea id="photoQuestion" style="min-height:74px" placeholder="可选：例如“这个脚手架看起来安全吗？我准备上去作业。”"></textarea>
+
+              <button id="photoButton" class="secondary-button workbench-primary ico-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg>开始识别风险</button>
+
+            </div>
+
+            <div id="photoError" class="error-card" hidden></div>
+
+            <div id="photoResult" class="result-box" hidden></div>
+
+            <div class="photo-tips">
+
+              <div class="photo-tip"><b>拍全一点</b>把作业面、防护设施和周边环境一起拍进去。</div>
+
+              <div class="photo-tip"><b>光线要够</b>避免逆光和严重抖动，暗处细节模型看不出来。</div>
+
+              <div class="photo-tip"><b>说清要干什么</b>补充一句你准备做什么，回答会更贴合。</div>
+
+            </div>
+
+            <p class="lead" id="visionNote" hidden></p>
+
+          </div>
+
+        </div>
+        </div>
       </div>
 
       <!-- ============ L2 指标条：主指标 + 支撑指标 ============ -->
@@ -574,120 +695,14 @@
 
 
 
-      <div class="panel">
-
-        <div class="panel-head">
-
-          <h2><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 拍照问安全</h2>
-
-          <span class="head-spacer"></span>
-
-          <span class="head-note">仅辅助识别肉眼可见风险</span>
-
-        </div>
-
+            <div class="panel">
+        <div class="panel-head"><h2>需要看图判断？</h2><span class="head-spacer"></span><span class="head-note">用首页的识别工作台</span></div>
         <div class="panel-body">
-
-          <p class="lead">拍一张现场照片，辅助识别肉眼可见的安全风险。照片不能替代现场安全员检查，也不会证明现场完全合规。</p>
-
-          <!-- ===== AI 识别工作台：上传区（竞赛级改造） ===== -->
-          <div id="photoDropzone" class="dropzone" role="button" tabindex="0"
-               aria-label="选择或拖放现场照片，支持 JPG PNG WEBP，不超过 8 MB">
-            <svg class="dropzone-art" viewBox="0 0 48 48" aria-hidden="true">
-              <rect x="6" y="14" width="36" height="26" rx="4"/>
-              <circle cx="24" cy="27" r="8"/>
-              <path d="M17 14l2-4h10l2 4"/>
-              <path d="M24 23v8M20 27l4-4 4 4"/>
-            </svg>
-            <div class="dropzone-title">拍照或拖入现场照片</div>
-            <div class="dropzone-sub">点击选择文件，也可以把图片直接拖到这里</div>
-            <div class="dropzone-hint">支持 JPG / PNG / WEBP · 单张不超过 8 MB</div>
-          </div>
-
-          <div class="capture-tools">
-
-            <button id="cameraButton" class="secondary-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 打开摄像头拍照</button>
-
-            <button id="filePickButton" class="secondary-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg> 从相册 / 文件选择</button>
-
-            <button id="captureButton" class="secondary-button" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 拍下这一张</button>
-
-            <button id="cameraStopButton" class="secondary-button" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg> 关闭摄像头</button>
-
-            <button id="photoRetakeButton" class="secondary-button" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg> 重拍 / 换一张</button>
-
-          </div>
-
-          <input id="sitePhoto" class="sr-only" type="file" accept="image/*" capture="environment"
-
-                 aria-label="选择或拍摄现场照片" />
-
-          <input id="sitePhotoCamera" class="sr-only" type="file" accept="image/*"
-
-                 aria-label="从相册或文件选择现场照片" />
-
-
-
-          <div id="cameraStage" class="camera-stage" hidden>
-
-            <video id="cameraVideo" playsinline muted aria-label="摄像头实时预览"></video>
-
-            <div class="camera-hint" id="cameraHint">把作业面、防护设施和周边环境一起拍进去；光线不足时先补光再拍。</div>
-
-          </div>
-
-
-
-          <div id="photoStage" class="photo-stage" hidden>
-
-            <img id="photoPreview" alt="待分析的现场照片预览" />
-
-            <div class="photo-facts" id="photoFacts"></div>
-
-            <div class="progress-inline" id="photoProgress" hidden>
-
-              <span>上传中</span>
-
-              <span class="bar"><i id="photoProgressBar"></i></span>
-
-              <span id="photoProgressText" class="num">0%</span>
-
-              <button id="photoCancelButton" class="ghost-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg> 取消</button>
-
-            </div>
-
-          </div>
-
-
-
-          <div class="composer-grid" style="margin-top:11px">
-
-            <label class="sr-only" for="photoQuestion">补充说明（可选）</label>
-
-            <textarea id="photoQuestion" style="min-height:74px" placeholder="可选：例如“这个脚手架看起来安全吗？我准备上去作业。”"></textarea>
-
-            <button id="photoButton" class="secondary-button workbench-primary ico-button" type="button"><svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg>开始识别风险</button>
-
-          </div>
-
-          <div id="photoError" class="error-card" hidden></div>
-
-          <div id="photoResult" class="result-box" hidden></div>
-
-          <div class="photo-tips">
-
-            <div class="photo-tip"><b>拍全一点</b>把作业面、防护设施和周边环境一起拍进去。</div>
-
-            <div class="photo-tip"><b>光线要够</b>避免逆光和严重抖动，暗处细节模型看不出来。</div>
-
-            <div class="photo-tip"><b>说清要干什么</b>补充一句你准备做什么，回答会更贴合。</div>
-
-          </div>
-
-          <p class="lead" id="visionNote" hidden></p>
-
+          <p class="lead">照片识别需要上传图片，在首页的 AI 工作台完成。文字问答不受影响，可以继续在这里提问。</p>
+          <button class="secondary-button ico-button" data-jump="home" type="button">
+            <svg class="ico" aria-hidden="true"><use href="#i-camera"/></svg>去首页拍照识别
+          </button>
         </div>
-
       </div>
 
     </section>

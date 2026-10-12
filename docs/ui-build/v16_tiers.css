@@ -1317,3 +1317,55 @@
   .ins-block { padding: 12px; }
   .ins-metric-num { font-size: 27px; }
 }
+
+/* ==========================================================================
+   第 24 轮 B · 首页 Hero 双栏（左价值 / 右 AI 工作台）
+   --------------------------------------------------------------------------
+   评委打开首页第一眼就要看到核心能力：上传照片 → AI 识别风险。
+   工作台是从「问安全」页整体搬来的同一套 DOM，逻辑不分叉。
+   ========================================================================== */
+.hero-split {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 32px; align-items: stretch;
+}
+/* 左栏文案在工作台旁边垂直居中，避免下方留出大片空白 */
+.hero-copy {
+  min-width: 0; display: flex; flex-direction: column; justify-content: center;
+}
+.hero-workbench { min-width: 0; align-self: start; }
+/* 拍照提示压实，缩短工作台高度 */
+.hero-workbench .photo-tip { padding: 6px 0; }
+.hero-workbench .photo-tips { margin-top: 12px; }
+/* 工作台里的面板本来就是卡片，Hero 内不再套一层边框 */
+.hero-workbench > .panel {
+  margin: 0; border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(12, 43, 74, .08));
+}
+
+@media (max-width: 1040px) {
+  .hero-split { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 640px) {
+  .hero-split { gap: 20px; }
+}
+
+/* 工作台搬进深色 Hero 后，.tier-l1 h2{color:#fff} 会覆盖标题导致白底白字。
+   这里把工作台内部文字色恢复为浅色主题的语义色。 */
+.hero-workbench .panel-head h2,
+.hero-workbench h2,
+.hero-workbench h3 { color: var(--brand); }
+.hero-workbench .panel-head h2 .ico { color: var(--brand-600); }
+.hero-workbench .lead,
+.hero-workbench .answer-meta { color: var(--i600); }
+.hero-workbench .head-note { color: var(--i500); }
+/* Hero 内工作台不重复外层深色底 */
+.hero-workbench .panel { background: var(--surface); }
+
+/* 拍照提示收进折叠，避免工作台过高 */
+.hero-workbench .shot-tips { margin-top: 12px; }
+/* Hero 内工作台压缩高度，避免比左栏高出一大截 */
+.hero-workbench .composer-grid textarea { min-height: 48px; }
+.hero-workbench .shot-tips { margin-top: 12px; }
+.hero-workbench .dropzone { padding: 20px 16px; }
+.hero-workbench .dropzone-art { width: 40px; height: 40px; }
+.hero-workbench .lead { font-size: var(--fs-sm); }
