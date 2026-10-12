@@ -1151,11 +1151,13 @@
 .ill-figure.ill-ppe { color: var(--brand-600); }
 .ill-figure.ill-edge { color: var(--brand-500); }
 .ill-figure.ill-scaffold { color: var(--brand-500); }
+/* 修：应急插画原来被套上红边框 + 粉底，看起来像「报警框」。
+   插画就是插画，用中性容器，不抢红警带的语义。 */
 .ill-figure.ill-emergency {
   color: var(--brand-700);
-  border-color: var(--risk-high);
-  border-left-width: 4px;
-  background: var(--risk-high-bg);
+  border: 1px solid var(--line);
+  border-left-width: 1px;
+  background: var(--surface-soft);
 }
 
 /* ==========================================================================

@@ -2099,6 +2099,11 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -4209,11 +4214,13 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
 .ill-figure.ill-ppe { color: var(--brand-600); }
 .ill-figure.ill-edge { color: var(--brand-500); }
 .ill-figure.ill-scaffold { color: var(--brand-500); }
+/* 修：应急插画原来被套上红边框 + 粉底，看起来像「报警框」。
+   插画就是插画，用中性容器，不抢红警带的语义。 */
 .ill-figure.ill-emergency {
   color: var(--brand-700);
-  border-color: var(--risk-high);
-  border-left-width: 4px;
-  background: var(--risk-high-bg);
+  border: 1px solid var(--line);
+  border-left-width: 1px;
+  background: var(--surface-soft);
 }
 
 /* ==========================================================================
@@ -5555,6 +5562,25 @@ input.is-suspect {
     <text x="46" y="14" font-size="11" fill="currentColor">立杆</text>
     <text x="132" y="14" font-size="11" fill="currentColor">剪刀撑</text>
     <text x="150" y="118" font-size="11" fill="currentColor">扫地杆</text>
+  </symbol>
+
+  <symbol id="ill-emergency" viewBox="0 0 240 130">
+    <path d="M8 108h224"/>
+    <path d="M34 96V74h6V60a4 4 0 0 1 8 0v14h4V56a4 4 0 0 1 8 0v18h4V62a4 4 0 0 1 8 0v16h4V70a4 4 0 0 1 8 0v18a14 14 0 0 1-14 14H48a14 14 0 0 1-14-14z"/>
+    <path d="M26 46h44"/>
+    <text x="26" y="38" font-size="10" fill="currentColor">1 停手</text>
+    <text x="24" y="126" font-size="10" fill="currentColor">停止作业</text>
+    <circle cx="112" cy="60" r="6"/>
+    <path d="M112 66v20M112 72l-9 8M112 72l9 8M112 86l-7 12M112 86l7 12"/>
+    <path d="M132 76h30M152 68l10 8-10 8"/>
+    <text x="104" y="38" font-size="10" fill="currentColor">2 撤离</text>
+    <text x="100" y="126" font-size="10" fill="currentColor">撤到安全区</text>
+    <rect x="184" y="72" width="34" height="26" rx="4"/>
+    <path d="M192 86h18"/>
+    <path d="M194 64a7 7 0 0 1 14 0"/>
+    <path d="M201 54v6"/>
+    <text x="182" y="38" font-size="10" fill="currentColor">3 报告</text>
+    <text x="178" y="126" font-size="10" fill="currentColor">报告负责人</text>
   </symbol>
 
   <symbol id="ill-ppe" viewBox="0 0 240 130">
