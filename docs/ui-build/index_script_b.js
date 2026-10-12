@@ -2647,19 +2647,36 @@
       var total = 0;
       groups.forEach(function (group) {
         if (!group.items.length && group.key !== "import") return;
-        var bucket = make("section", "check-group");
-        var head = make("div", "check-group-head");
-        head.appendChild(make("b", "check-group-title", group.title));
-        head.appendChild(make("span", "check-group-note", group.note));
-        bucket.appendChild(head);
+        /* 只有「当班必查」默认展开；常规项与我的导入收进 details，
+           否则手机端一屏看不到重点（第 20 轮 §3） */
+        var collapsible = group.key !== "required";
+        var bucket;
+        var box = null;
+        if (collapsible) {
+          box = make("details", "disclosure check-group-more");
+          var summary = make("summary", "", group.title + "（" + group.items.length + " 条）");
+          summary.appendChild(make("span", "disclosure-hint", group.note));
+          box.appendChild(summary);
+          bucket = make("div", "disclosure-body");
+          box.appendChild(bucket);
+          host.appendChild(box);
+        } else {
+          bucket = make("section", "check-group");
+          var head = make("div", "check-group-head");
+          head.appendChild(make("b", "check-group-title", group.title));
+          head.appendChild(make("span", "check-group-note", group.note));
+          bucket.appendChild(head);
+        }
 
         if (!group.items.length) {
           bucket.appendChild(make("p", "empty-state",
             group.key === "import"
               ? "还没有导入项目自己的检查表。可以在下面「导入项目自有清单」里添加。"
               : "这一组暂时没有内容。"));
-          host.appendChild(bucket);
+          if (box) box.appendChild(bucket);
+
           return;
+
         }
 
         group.items.forEach(function (item) {
