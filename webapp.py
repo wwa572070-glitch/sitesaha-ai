@@ -2313,6 +2313,11 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -4733,6 +4738,93 @@ main { max-width: var(--w-home); }
 .daily-case { margin-top: 16px; }
 .daily-case > summary { font-size: var(--fs-md); }
 .daily-case .tier-l4 { margin: 0; border: 0; background: none; padding: 0; }
+
+/* ==========================================================================
+   第 28 轮 · 表格与状态标签统一
+   --------------------------------------------------------------------------
+   原来 .tier-table（标准库）与 .import-table（导入预览）表头、斑马纹、
+   行高、悬停各不相同，同一站内像两个产品。
+   这里抽出共享变量，两套表统一到同一规格。
+   ========================================================================== */
+:root {
+  --table-head-bg: var(--brand);
+  --table-head-fg: #fff;
+  --table-pad-y: 9px;
+  --table-pad-x: 12px;
+  --table-row-line: var(--line);
+  --table-row-alt: var(--i50);
+  --table-row-hover: var(--brand-050);
+}
+
+/* 两张表统一：表头、斑马纹、行高、悬停 */
+.tier-table th,
+.import-table th {
+  background: var(--table-head-bg);
+  color: var(--table-head-fg);
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  padding: var(--table-pad-y) var(--table-pad-x);
+}
+
+.tier-table td,
+.import-table td {
+  padding: var(--table-pad-y) var(--table-pad-x);
+  border-top: 1px solid var(--table-row-line);
+  color: var(--i600);
+  line-height: 1.6;
+  vertical-align: top;
+}
+
+.tier-table tbody tr:nth-child(even),
+.import-table tbody tr:nth-child(even) {
+  background: var(--table-row-alt);
+}
+
+.tier-table tbody tr:hover,
+.import-table tbody tr:hover {
+  background: var(--table-row-hover);
+}
+
+/* 导入预览的错误行保持危险色，不被斑马纹覆盖 */
+.import-table tr.is-error td {
+  background: var(--risk-high-bg);
+  color: var(--risk-high-text);
+}
+
+/* 小屏：表格横向可滚，不挤压内容 */
+.table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 640px) {
+  :root { --table-pad-y: 8px; --table-pad-x: 10px; }
+  .tier-table, .import-table { font-size: var(--fs-xs); }
+}
+
+/* --------------------------------------------------------------------------
+   状态标签：风险等级、标准现行状态、来源标签统一尺寸
+   -------------------------------------------------------------------------- */
+.tag,
+.status-badge,
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* 语义色只在真正表示状态时使用，不做装饰 */
+.tag.is-current,
+.status-badge.is-ok { background: var(--risk-low-bg); color: var(--risk-low-text); }
+.tag.is-pending,
+.status-badge.is-warn { background: var(--risk-mid-bg); color: var(--risk-mid-text); }
+.tag.is-void,
+.status-badge.is-dead { background: var(--risk-high-bg); color: var(--risk-high-text); }
+.tag.is-neutral { background: var(--i100); color: var(--i600); }
 /* ===== V16 TIERS END ===== */
 
 /* ===== V17 PALETTE BEGIN ===== */
