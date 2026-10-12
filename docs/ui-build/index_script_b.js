@@ -743,6 +743,77 @@
       button.addEventListener("click", function () { window.print(); });
     })();
 
+    /* ==================================================================
+       竞赛级改造 · 上传区交互
+       ------------------------------------------------------------------
+       只做视觉层与文件投递：
+         · 点击上传区 → 触发已有的 sitePhotoCamera 选择器
+         · 拖放 → 把文件塞进同一个 input，再派发 change，
+           复用现有的全部校验与上传逻辑，不新开代码路径
+         · 选中图片后收起上传区；重拍时再显示
+       ================================================================== */
+    (function bindDropzone() {
+      var zone = $("photoDropzone");
+      var input = $("sitePhotoCamera");
+      if (!zone || !input) return;
+
+      function openPicker() { input.click(); }
+
+      zone.addEventListener("click", openPicker);
+      zone.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openPicker();
+        }
+      });
+
+      ["dragenter", "dragover"].forEach(function (name) {
+        zone.addEventListener(name, function (event) {
+          event.preventDefault();
+          zone.classList.add("is-dragover");
+        });
+      });
+      ["dragleave", "drop"].forEach(function (name) {
+        zone.addEventListener(name, function (event) {
+          event.preventDefault();
+          zone.classList.remove("is-dragover");
+        });
+      });
+
+      zone.addEventListener("drop", function (event) {
+        var files = event.dataTransfer && event.dataTransfer.files;
+        if (!files || !files.length) return;
+        try {
+          var transfer = new DataTransfer();
+          transfer.items.add(files[0]);
+          input.files = transfer.files;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        } catch (error) {
+          /* 浏览器不支持构造 DataTransfer 时，退回打开选择器 */
+          openPicker();
+        }
+      });
+
+      /* 有图就收起上传区，没图就显示 */
+      function syncDropzone() {
+        var stage = $("photoStage");
+        var cameraStage = $("cameraStage");
+        var hasImage = stage && !stage.hidden;
+        var cameraOn = cameraStage && !cameraStage.hidden;
+        zone.hidden = Boolean(hasImage || cameraOn);
+      }
+
+      if (window.MutationObserver) {
+        ["photoStage", "cameraStage"].forEach(function (id) {
+          var node = $(id);
+          if (!node) return;
+          new MutationObserver(syncDropzone).observe(node,
+            { attributes: true, attributeFilter: ["hidden"] });
+        });
+      }
+      syncDropzone();
+    })();
+
     (function bindSosFab() {
       var fab = $("sosFab");
       if (!fab) return;
