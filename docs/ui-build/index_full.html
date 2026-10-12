@@ -2024,6 +2024,41 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -4000,6 +4035,169 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   .emergency-card { border: 1.5px solid #000 !important; break-inside: avoid; }
   body { background: #fff !important; }
 }
+
+/* ==========================================================================
+   §5-1 KPI 指标条（第 21 轮）
+   --------------------------------------------------------------------------
+   原来 4 个格子等权，看不出哪个和自己有关。
+   现在：主格（我的安全知识，带环形图）+ 3 个支撑格。
+   环形图只用真实分母，不编造百分比。
+   ========================================================================== */
+.tier-l2 { align-items: stretch; }
+.l2-cell.is-primary {
+  /* 基础 .l2-cell 是 column，主格要横向排列环形图与文字 */
+  display: flex; flex-direction: row; align-items: center; gap: 16px;
+  flex: 1 1 260px;
+  background: linear-gradient(135deg, var(--brand-050), var(--surface) 62%);
+  border-color: var(--brand-100);
+}
+.l2-ring-wrap { position: relative; width: 64px; height: 64px; flex: 0 0 auto; }
+.l2-ring { width: 64px; height: 64px; display: block; transform: rotate(-90deg); }
+.l2-ring-track {
+  fill: none; stroke: var(--brand-100); stroke-width: 6;
+}
+.l2-ring-fill {
+  fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round;
+  transition: stroke-dashoffset .6s cubic-bezier(.22,.61,.36,1);
+}
+.l2-ring-center {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-variant-numeric: tabular-nums; pointer-events: none;
+}
+.l2-ring-pct { font-size: var(--fs-md); font-weight: 800; color: var(--brand); }
+.l2-ring-unit { font-size: var(--fs-xs); color: var(--i500); margin-left: 0; }
+.l2-primary-text { min-width: 0; }
+.l2-num-sm { font-size: var(--fs-xl); }
+
+@media (max-width: 640px) {
+  .l2-cell.is-primary { flex: 1 1 100%; }
+  .l2-ring-wrap, .l2-ring { width: 56px; height: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .l2-ring-fill { transition: none; }
+}
+
+/* ==========================================================================
+   §5-3 案例对照卡（第 21 轮）
+   --------------------------------------------------------------------------
+   桌面双栏对照，移动端上下堆叠。
+   左「错误做法」用克制的危险色，右「正确做法」用成功色，
+   但两侧都有图标 + 文字标签，不单纯依赖颜色表意。
+   ========================================================================== */
+.case-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin: 12px 0 4px;
+}
+.case-side {
+  border-radius: var(--r-sm); padding: 12px 16px;
+  border: 1px solid var(--line); background: var(--surface);
+  min-width: 0;
+}
+.case-side.is-wrong { border-left: 4px solid var(--risk-high); background: var(--risk-high-bg); }
+.case-side.is-right { border-left: 4px solid var(--risk-low); background: var(--risk-low-bg); }
+.case-side-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--fs-sm); margin-bottom: 8px;
+}
+.case-side.is-wrong .case-side-head { color: var(--risk-high-text); }
+.case-side.is-right .case-side-head { color: var(--risk-low-text); }
+.case-side-body {
+  margin: 0; font-size: var(--fs-sm); line-height: 1.7; color: var(--i700);
+}
+.case-side-body.is-empty { color: var(--i500); }
+.case-why {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  font-size: var(--fs-xs); line-height: 1.7; color: var(--i600);
+}
+.case-outcome {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  font-size: var(--fs-xs); line-height: 1.7; color: var(--i600);
+}
+
+@media (max-width: 720px) {
+  .case-compare { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* 微交互：案例卡展开（§5-5） */
+.case-detail {
+  animation: caseReveal .22s ease-out;
+}
+@keyframes caseReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-detail { animation: none; }
+}
+
+/* ==========================================================================
+   §5-4 线稿插画（第 21 轮）
+   --------------------------------------------------------------------------
+   四张统一风格工程线稿：临边防护 / 脚手架 / PPE 六件套 / 应急三步骤。
+   全部 currentColor，随主题变色，无外部图片依赖。
+   ========================================================================== */
+.ill-figure {
+  margin: 0; padding: 12px 16px;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface-soft);
+  color: var(--brand-600);
+}
+.ill-figure > svg {
+  display: block; width: 100%; height: auto;
+  max-width: 420px; margin: 0 auto;
+  fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.ill-figure figcaption {
+  margin-top: 8px; font-size: var(--fs-xs); line-height: 1.6;
+  color: var(--i600); text-align: center;
+}
+.ill-figure.is-compact > svg { max-width: 300px; }
+
+/* 插画内的文字不要描边 */
+.ill-figure > svg text { stroke: none; fill: currentColor; }
+
+@media (max-width: 640px) {
+  .ill-figure { padding: 12px; }
+}
+
+.ill-figure.ill-ppe { color: var(--brand-600); }
+.ill-figure.ill-edge { color: var(--brand-500); }
+.ill-figure.ill-scaffold { color: var(--brand-500); }
+.ill-figure.ill-emergency {
+  color: var(--brand-700);
+  border-color: var(--risk-high);
+  border-left-width: 4px;
+  background: var(--risk-high-bg);
+}
+
+/* ==========================================================================
+   §5-5 微交互（第 21 轮）
+   --------------------------------------------------------------------------
+   轻量、只动 transform / opacity，<=300ms，全部尊重 prefers-reduced-motion。
+   勾选状态本身由业务逻辑写入，动画只做视觉确认，不代替状态。
+   ========================================================================== */
+.check-item { transition: background-color .18s ease, border-color .18s ease; }
+.check-item.checked { background: var(--risk-low-bg); border-color: var(--risk-low); }
+.check-item .check-box,
+.check-item input[type="checkbox"] {
+  transition: transform .16s cubic-bezier(.34,1.56,.64,1), background-color .16s ease;
+}
+.check-item.checked .check-box { transform: scale(1.06); }
+
+/* 进度条 / 进度环数字变化时的轻推 */
+.step-item.is-done .step-order { transition: background-color .2s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .check-item, .check-item .check-box, .check-item input[type="checkbox"],
+  .step-item.is-done .step-order { transition: none; }
+  .check-item.checked .check-box { transform: none; }
+}
 /* ===== V16 TIERS END ===== */
 
 /* ===== V17 PALETTE BEGIN ===== */
@@ -5236,8 +5434,32 @@ input.is-suspect {
         <div id="homeRoleHint" class="l1-rolehint">还没有选择工种 —— 未选择时按通用要点回答，选择后会自动带上本工种的主要风险与必守规矩。</div>
       </div>
 
-      <!-- ============ L2 指标条：4 个数字 ============ -->
+      <!-- ============ L2 指标条：主指标 + 支撑指标 ============ -->
       <div class="tier-l2" role="group" aria-label="知识库与学习状态">
+
+        <!-- 主指标：用户自己的安全知识水平（唯一有真实分母的指标） -->
+        <div class="l2-cell is-primary">
+          <div class="l2-ring-wrap">
+            <svg class="l2-ring" id="kpiRing" viewBox="0 0 48 48" role="img"
+                 aria-labelledby="kpiRingLabel">
+              <title id="kpiRingLabel">安全知识测验最佳成绩</title>
+              <circle class="l2-ring-track" cx="24" cy="24" r="20"/>
+              <circle class="l2-ring-fill" id="kpiRingFill" cx="24" cy="24" r="20"
+                      stroke-dasharray="125.66" stroke-dashoffset="125.66"/>
+            </svg>
+            <div class="l2-ring-center">
+              <span class="l2-ring-pct" id="kpiRingPct">--</span>
+              <span class="l2-ring-unit">%</span>
+            </div>
+          </div>
+          <div class="l2-primary-text">
+            <div class="l2-label">我的安全知识</div>
+            <div class="l2-num l2-num-sm"><span id="kpiQuiz">0/20</span></div>
+            <div class="l2-note" id="kpiQuizNote">还没有测验记录</div>
+          </div>
+        </div>
+
+        <!-- 支撑指标：系统知识库规模（无有效分母，不画环） -->
         <div class="l2-cell">
           <div class="l2-num"><span id="kpiChunks">--</span><span class="unit">条</span></div>
           <div class="l2-label">知识片段</div>
@@ -5252,11 +5474,6 @@ input.is-suspect {
           <div class="l2-num"><span id="kpiCases">--</span><span class="unit">例</span></div>
           <div class="l2-label">真实案例</div>
           <div class="l2-note">事故与隐患通报整理</div>
-        </div>
-        <div class="l2-cell">
-          <div class="l2-num"><span id="kpiQuiz">0/20</span></div>
-          <div class="l2-label">我的测验掌握度</div>
-          <div class="l2-note" id="kpiQuizNote">本地保存，仅自己可见</div>
         </div>
       </div>
 
@@ -5299,6 +5516,15 @@ input.is-suspect {
       </div>
   </div>
 </details>
+
+      <!-- ============ §5-4 引导图：PPE 六件套 ============ -->
+      <figure class="ill-figure ill-ppe">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illPpeLabel">
+          <title id="illPpeLabel">个人防护用品：安全帽、安全带、防护手套、护目镜、反光背心、安全鞋</title>
+          <use href="#ill-ppe"/>
+        </svg>
+        <figcaption>上工前对照检查个人防护用品是否齐全、完好。</figcaption>
+      </figure>
 
       <!-- ============ L5 引用块：安全底线（6 条必须保留） ============ -->
       <div class="tier-l4">
@@ -5589,6 +5815,14 @@ input.is-suspect {
         </div>
 
       </div>
+
+      <figure class="ill-figure ill-scaffold">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illScaffoldLabel">
+          <title id="illScaffoldLabel">脚手架安全做法：立杆、剪刀撑、扫地杆、作业层防护齐全</title>
+          <use href="#ill-scaffold"/>
+        </svg>
+        <figcaption>脚手架要点：立杆与剪刀撑齐全、设扫地杆、作业层防护完整。搭拆必须由持证人员按方案进行。</figcaption>
+      </figure>
 
 <div class="panel" id="trainPathPanel">
 
@@ -6125,7 +6359,15 @@ input.is-suspect {
 
 <div class="panel">
 
-        <details class="disclosure">
+        <figure class="ill-figure ill-edge">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illEdgeLabel">
+          <title id="illEdgeLabel">临边防护做法：防护栏杆高度 1.2 米、中间栏杆、挡脚板不低于 180 毫米</title>
+          <use href="#ill-edge"/>
+        </svg>
+        <figcaption>临边防护要点：栏杆 1.2m、设中间防护、挡脚板 ≥180mm。数值以适用规范与现场交底为准。</figcaption>
+      </figure>
+
+      <details class="disclosure">
   <summary>检查项目索引（参考，不代替标准检查表）<span class="disclosure-hint">9 类 · 按 JGJ 59-2011 整理</span></summary>
   <div class="disclosure-body">
 <div class="panel-head">
@@ -6191,6 +6433,14 @@ input.is-suspect {
         </div>
         <p class="sos-alert-note">不要为了赶工或取物品返回危险区域。以下步骤不替代项目应急预案，现场以项目预案与应急指挥为准。</p>
       </div>
+
+      <figure class="ill-figure ill-emergency">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illEmergencyLabel">
+          <title id="illEmergencyLabel">应急处置三步骤：停手、撤离到安全区、报告负责人</title>
+          <use href="#ill-emergency"/>
+        </svg>
+        <figcaption>出事先做这三步：停手 → 撤到安全区 → 报告负责人。具体以项目应急预案和现场指挥为准。</figcaption>
+      </figure>
 
       <div class="panel">
 
@@ -7173,33 +7423,73 @@ input.is-suspect {
       });
     }
 
+    /* ==================================================================
+       §5-3 案例对照卡（第 21 轮）
+       ------------------------------------------------------------------
+       左「✗ 错误做法」= 真实经过 + 真实致险因素
+       右「✓ 正确做法」= 真实防控要点（+ 结果）
+
+       只用案例里已有的字段，不编造条文、数据或标准号。
+       图标 + 标签 + 文字共同表意，不单纯依赖红绿。
+       ================================================================== */
+    function caseCompare(item) {
+      var grid = make("div", "case-compare");
+
+      /* ---- 左：错误做法 ---- */
+      var wrong = make("section", "case-side is-wrong");
+      var wrongHead = make("div", "case-side-head");
+      wrongHead.appendChild(makeIcon("i-close", "ico ico-sm"));
+      wrongHead.appendChild(make("b", "", "错误做法"));
+      wrong.appendChild(wrongHead);
+
+      if (item.what_happened) {
+        wrong.appendChild(make("p", "case-side-body", item.what_happened));
+      }
+      if (item.why_dangerous) {
+        var why = make("div", "case-why");
+        why.appendChild(makeIcon("i-alert", "ico ico-sm"));
+        var whyText = make("span");
+        whyText.appendChild(make("b", "", "为什么危险："));
+        whyText.appendChild(document.createTextNode(item.why_dangerous));
+        why.appendChild(whyText);
+        wrong.appendChild(why);
+      }
+      grid.appendChild(wrong);
+
+      /* ---- 右：正确做法 ---- */
+      var right = make("section", "case-side is-right");
+      var rightHead = make("div", "case-side-head");
+      rightHead.appendChild(makeIcon("i-check", "ico ico-sm"));
+      rightHead.appendChild(make("b", "", "正确做法"));
+      right.appendChild(rightHead);
+
+      if (item.lesson) {
+        right.appendChild(make("p", "case-side-body", item.lesson));
+      } else {
+        /* 没有防控要点就不硬编 —— 如实说明 */
+        right.appendChild(make("p", "case-side-body is-empty",
+          "这条通报没有给出防控要点，请以现场安全交底和适用规范为准。"));
+      }
+      if (item.consequence) {
+        var outcome = make("div", "case-outcome");
+        outcome.appendChild(make("b", "", "结果："));
+        outcome.appendChild(document.createTextNode(item.consequence));
+        right.appendChild(outcome);
+      }
+      grid.appendChild(right);
+
+      return grid;
+    }
+
     function caseCard(item, compact) {
       var card = make("article", "case-card");
       card.dataset.category = item.category || "";
       card.appendChild(make("span", "case-tag", item.category || "未分类"));
       card.appendChild(make("h3", "", item.title || ""));
-      var pairs = [
-        ["事故 / 隐患经过", item.what_happened],
-        ["主要致险因素", item.why_dangerous],
-      ];
-      pairs.forEach(function (pair) {
-        if (!pair[1]) return;
-        var p = make("p");
-        p.appendChild(make("span", "case-label", pair[0] + "："));
-        p.appendChild(document.createTextNode(pair[1]));
-        card.appendChild(p);
-      });
+      card.appendChild(caseCompare(item));
       if (!compact) {
-        var detail = make("div", "case-detail");
-        if (item.consequence) {
-          var p1 = make("p");
-          p1.appendChild(make("span", "case-label", "后果与影响："));
-          p1.appendChild(document.createTextNode(item.consequence));
-          detail.appendChild(p1);
-        }
-        if (item.lesson) detail.appendChild(make("p", "case-lesson", "防控要点：" + item.lesson));
-        detail.appendChild(make("div", "case-source", "来源：" + (item.source_name || "未标注") + " · " + (item.date || "")));
-        card.appendChild(detail);
+        card.appendChild(make("div", "case-source",
+          "来源：" + (item.source_name || "未标注") + " · " + (item.date || "")));
       }
       return card;
     }
@@ -7262,6 +7552,45 @@ input.is-suspect {
       renderTrainingProgress();
     }
 
+    /* ==================================================================
+       §5-1 KPI 环形进度（第 21 轮）
+       ------------------------------------------------------------------
+       只用真实比例。没有测验记录时（best 为 null）显示 "--" 且不画环，
+       不编造百分比。
+
+       周长 = 2 * PI * 20 = 125.66，与 markup 里的 stroke-dasharray 一致。
+       ================================================================== */
+    var KPI_RING_LENGTH = 125.66;
+    var kpiRingShown = -1;
+
+    function updateKpiRing(best, total) {
+      var ring = $("kpiRing");
+      var fill = $("kpiRingFill");
+      var pctLabel = $("kpiRingPct");
+      if (!ring || !fill || !pctLabel) return;
+
+      if (best === null || best === undefined || !total) {
+        /* 没有有效分母 —— 不画环 */
+        if (kpiRingShown !== -1) {
+          fill.style.strokeDashoffset = String(KPI_RING_LENGTH);
+          pctLabel.textContent = "--";
+          ring.setAttribute("aria-label", "安全知识测验还没有记录");
+          kpiRingShown = -1;
+        }
+        return;
+      }
+
+      var percent = Math.max(0, Math.min(100, Math.round((best / total) * 100)));
+      /* 值没变就不重设，避免重复渲染闪烁 */
+      if (percent === kpiRingShown) return;
+      kpiRingShown = percent;
+
+      fill.style.strokeDashoffset = String(KPI_RING_LENGTH * (1 - percent / 100));
+      pctLabel.textContent = String(percent);
+      ring.setAttribute("aria-label",
+        "安全知识测验最佳成绩 " + best + " / " + total + "，正确率 " + percent + "%");
+    }
+
     function renderTrainingProgress() {
       var steps = (trainingData.training_steps || []).length || 5;      var done = readStore("sitesaha-steps-v1", {});
       var count = 0;
@@ -7279,9 +7608,16 @@ input.is-suspect {
       var kpiQuiz = $("kpiQuiz");
       if (kpiQuiz) {
         var quiz = readStore(QUIZ_KEY, EMPTY_QUIZ);
-        kpiQuiz.textContent = quiz.bestCorrect + "/" + (quiz.total || 20);
+        var quizTotal = quiz.total || 20;
+        var quizBest = quiz.bestCorrect || 0;
+        kpiQuiz.textContent = quizBest + "/" + quizTotal;
         var note = $("kpiQuizNote");
-        if (note) note.textContent = quiz.attempts ? ("已测 " + quiz.attempts + " 次 · 历史最佳") : "本地保存，仅自己可见";
+        if (note) {
+          note.textContent = quiz.attempts
+            ? ("已测 " + quiz.attempts + " 次 · 历史最佳")
+            : "还没有测验记录";
+        }
+        updateKpiRing(quiz.attempts ? quizBest : null, quizTotal);
       }
     }
 

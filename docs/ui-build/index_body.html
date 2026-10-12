@@ -338,8 +338,32 @@
         <div id="homeRoleHint" class="l1-rolehint">还没有选择工种 —— 未选择时按通用要点回答，选择后会自动带上本工种的主要风险与必守规矩。</div>
       </div>
 
-      <!-- ============ L2 指标条：4 个数字 ============ -->
+      <!-- ============ L2 指标条：主指标 + 支撑指标 ============ -->
       <div class="tier-l2" role="group" aria-label="知识库与学习状态">
+
+        <!-- 主指标：用户自己的安全知识水平（唯一有真实分母的指标） -->
+        <div class="l2-cell is-primary">
+          <div class="l2-ring-wrap">
+            <svg class="l2-ring" id="kpiRing" viewBox="0 0 48 48" role="img"
+                 aria-labelledby="kpiRingLabel">
+              <title id="kpiRingLabel">安全知识测验最佳成绩</title>
+              <circle class="l2-ring-track" cx="24" cy="24" r="20"/>
+              <circle class="l2-ring-fill" id="kpiRingFill" cx="24" cy="24" r="20"
+                      stroke-dasharray="125.66" stroke-dashoffset="125.66"/>
+            </svg>
+            <div class="l2-ring-center">
+              <span class="l2-ring-pct" id="kpiRingPct">--</span>
+              <span class="l2-ring-unit">%</span>
+            </div>
+          </div>
+          <div class="l2-primary-text">
+            <div class="l2-label">我的安全知识</div>
+            <div class="l2-num l2-num-sm"><span id="kpiQuiz">0/20</span></div>
+            <div class="l2-note" id="kpiQuizNote">还没有测验记录</div>
+          </div>
+        </div>
+
+        <!-- 支撑指标：系统知识库规模（无有效分母，不画环） -->
         <div class="l2-cell">
           <div class="l2-num"><span id="kpiChunks">--</span><span class="unit">条</span></div>
           <div class="l2-label">知识片段</div>
@@ -354,11 +378,6 @@
           <div class="l2-num"><span id="kpiCases">--</span><span class="unit">例</span></div>
           <div class="l2-label">真实案例</div>
           <div class="l2-note">事故与隐患通报整理</div>
-        </div>
-        <div class="l2-cell">
-          <div class="l2-num"><span id="kpiQuiz">0/20</span></div>
-          <div class="l2-label">我的测验掌握度</div>
-          <div class="l2-note" id="kpiQuizNote">本地保存，仅自己可见</div>
         </div>
       </div>
 
@@ -401,6 +420,15 @@
       </div>
   </div>
 </details>
+
+      <!-- ============ §5-4 引导图：PPE 六件套 ============ -->
+      <figure class="ill-figure ill-ppe">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illPpeLabel">
+          <title id="illPpeLabel">个人防护用品：安全帽、安全带、防护手套、护目镜、反光背心、安全鞋</title>
+          <use href="#ill-ppe"/>
+        </svg>
+        <figcaption>上工前对照检查个人防护用品是否齐全、完好。</figcaption>
+      </figure>
 
       <!-- ============ L5 引用块：安全底线（6 条必须保留） ============ -->
       <div class="tier-l4">
@@ -691,6 +719,14 @@
         </div>
 
       </div>
+
+      <figure class="ill-figure ill-scaffold">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illScaffoldLabel">
+          <title id="illScaffoldLabel">脚手架安全做法：立杆、剪刀撑、扫地杆、作业层防护齐全</title>
+          <use href="#ill-scaffold"/>
+        </svg>
+        <figcaption>脚手架要点：立杆与剪刀撑齐全、设扫地杆、作业层防护完整。搭拆必须由持证人员按方案进行。</figcaption>
+      </figure>
 
 <div class="panel" id="trainPathPanel">
 
@@ -1227,7 +1263,15 @@
 
 <div class="panel">
 
-        <details class="disclosure">
+        <figure class="ill-figure ill-edge">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illEdgeLabel">
+          <title id="illEdgeLabel">临边防护做法：防护栏杆高度 1.2 米、中间栏杆、挡脚板不低于 180 毫米</title>
+          <use href="#ill-edge"/>
+        </svg>
+        <figcaption>临边防护要点：栏杆 1.2m、设中间防护、挡脚板 ≥180mm。数值以适用规范与现场交底为准。</figcaption>
+      </figure>
+
+      <details class="disclosure">
   <summary>检查项目索引（参考，不代替标准检查表）<span class="disclosure-hint">9 类 · 按 JGJ 59-2011 整理</span></summary>
   <div class="disclosure-body">
 <div class="panel-head">
@@ -1293,6 +1337,14 @@
         </div>
         <p class="sos-alert-note">不要为了赶工或取物品返回危险区域。以下步骤不替代项目应急预案，现场以项目预案与应急指挥为准。</p>
       </div>
+
+      <figure class="ill-figure ill-emergency">
+        <svg viewBox="0 0 240 130" role="img" aria-labelledby="illEmergencyLabel">
+          <title id="illEmergencyLabel">应急处置三步骤：停手、撤离到安全区、报告负责人</title>
+          <use href="#ill-emergency"/>
+        </svg>
+        <figcaption>出事先做这三步：停手 → 撤到安全区 → 报告负责人。具体以项目应急预案和现场指挥为准。</figcaption>
+      </figure>
 
       <div class="panel">
 

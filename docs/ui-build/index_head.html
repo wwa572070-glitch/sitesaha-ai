@@ -2024,6 +2024,41 @@ tbody tr:hover { background:var(--panel-soft); }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===== V13 PHASES BEGIN ===== */
 .phase { margin:32px 0 0; }
 .phase:first-of-type { margin-top:24px; }
@@ -3999,6 +4034,169 @@ footer { max-width:1024px; padding:20px 16px 48px; color:var(--i500); font-size:
   .sos-alert-chant span { border: 2px solid #000 !important; }
   .emergency-card { border: 1.5px solid #000 !important; break-inside: avoid; }
   body { background: #fff !important; }
+}
+
+/* ==========================================================================
+   §5-1 KPI 指标条（第 21 轮）
+   --------------------------------------------------------------------------
+   原来 4 个格子等权，看不出哪个和自己有关。
+   现在：主格（我的安全知识，带环形图）+ 3 个支撑格。
+   环形图只用真实分母，不编造百分比。
+   ========================================================================== */
+.tier-l2 { align-items: stretch; }
+.l2-cell.is-primary {
+  /* 基础 .l2-cell 是 column，主格要横向排列环形图与文字 */
+  display: flex; flex-direction: row; align-items: center; gap: 16px;
+  flex: 1 1 260px;
+  background: linear-gradient(135deg, var(--brand-050), var(--surface) 62%);
+  border-color: var(--brand-100);
+}
+.l2-ring-wrap { position: relative; width: 64px; height: 64px; flex: 0 0 auto; }
+.l2-ring { width: 64px; height: 64px; display: block; transform: rotate(-90deg); }
+.l2-ring-track {
+  fill: none; stroke: var(--brand-100); stroke-width: 6;
+}
+.l2-ring-fill {
+  fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round;
+  transition: stroke-dashoffset .6s cubic-bezier(.22,.61,.36,1);
+}
+.l2-ring-center {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-variant-numeric: tabular-nums; pointer-events: none;
+}
+.l2-ring-pct { font-size: var(--fs-md); font-weight: 800; color: var(--brand); }
+.l2-ring-unit { font-size: var(--fs-xs); color: var(--i500); margin-left: 0; }
+.l2-primary-text { min-width: 0; }
+.l2-num-sm { font-size: var(--fs-xl); }
+
+@media (max-width: 640px) {
+  .l2-cell.is-primary { flex: 1 1 100%; }
+  .l2-ring-wrap, .l2-ring { width: 56px; height: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .l2-ring-fill { transition: none; }
+}
+
+/* ==========================================================================
+   §5-3 案例对照卡（第 21 轮）
+   --------------------------------------------------------------------------
+   桌面双栏对照，移动端上下堆叠。
+   左「错误做法」用克制的危险色，右「正确做法」用成功色，
+   但两侧都有图标 + 文字标签，不单纯依赖颜色表意。
+   ========================================================================== */
+.case-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  margin: 12px 0 4px;
+}
+.case-side {
+  border-radius: var(--r-sm); padding: 12px 16px;
+  border: 1px solid var(--line); background: var(--surface);
+  min-width: 0;
+}
+.case-side.is-wrong { border-left: 4px solid var(--risk-high); background: var(--risk-high-bg); }
+.case-side.is-right { border-left: 4px solid var(--risk-low); background: var(--risk-low-bg); }
+.case-side-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--fs-sm); margin-bottom: 8px;
+}
+.case-side.is-wrong .case-side-head { color: var(--risk-high-text); }
+.case-side.is-right .case-side-head { color: var(--risk-low-text); }
+.case-side-body {
+  margin: 0; font-size: var(--fs-sm); line-height: 1.7; color: var(--i700);
+}
+.case-side-body.is-empty { color: var(--i500); }
+.case-why {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  font-size: var(--fs-xs); line-height: 1.7; color: var(--i600);
+}
+.case-outcome {
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  font-size: var(--fs-xs); line-height: 1.7; color: var(--i600);
+}
+
+@media (max-width: 720px) {
+  .case-compare { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* 微交互：案例卡展开（§5-5） */
+.case-detail {
+  animation: caseReveal .22s ease-out;
+}
+@keyframes caseReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-detail { animation: none; }
+}
+
+/* ==========================================================================
+   §5-4 线稿插画（第 21 轮）
+   --------------------------------------------------------------------------
+   四张统一风格工程线稿：临边防护 / 脚手架 / PPE 六件套 / 应急三步骤。
+   全部 currentColor，随主题变色，无外部图片依赖。
+   ========================================================================== */
+.ill-figure {
+  margin: 0; padding: 12px 16px;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface-soft);
+  color: var(--brand-600);
+}
+.ill-figure > svg {
+  display: block; width: 100%; height: auto;
+  max-width: 420px; margin: 0 auto;
+  fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.ill-figure figcaption {
+  margin-top: 8px; font-size: var(--fs-xs); line-height: 1.6;
+  color: var(--i600); text-align: center;
+}
+.ill-figure.is-compact > svg { max-width: 300px; }
+
+/* 插画内的文字不要描边 */
+.ill-figure > svg text { stroke: none; fill: currentColor; }
+
+@media (max-width: 640px) {
+  .ill-figure { padding: 12px; }
+}
+
+.ill-figure.ill-ppe { color: var(--brand-600); }
+.ill-figure.ill-edge { color: var(--brand-500); }
+.ill-figure.ill-scaffold { color: var(--brand-500); }
+.ill-figure.ill-emergency {
+  color: var(--brand-700);
+  border-color: var(--risk-high);
+  border-left-width: 4px;
+  background: var(--risk-high-bg);
+}
+
+/* ==========================================================================
+   §5-5 微交互（第 21 轮）
+   --------------------------------------------------------------------------
+   轻量、只动 transform / opacity，<=300ms，全部尊重 prefers-reduced-motion。
+   勾选状态本身由业务逻辑写入，动画只做视觉确认，不代替状态。
+   ========================================================================== */
+.check-item { transition: background-color .18s ease, border-color .18s ease; }
+.check-item.checked { background: var(--risk-low-bg); border-color: var(--risk-low); }
+.check-item .check-box,
+.check-item input[type="checkbox"] {
+  transition: transform .16s cubic-bezier(.34,1.56,.64,1), background-color .16s ease;
+}
+.check-item.checked .check-box { transform: scale(1.06); }
+
+/* 进度条 / 进度环数字变化时的轻推 */
+.step-item.is-done .step-order { transition: background-color .2s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .check-item, .check-item .check-box, .check-item input[type="checkbox"],
+  .step-item.is-done .step-order { transition: none; }
+  .check-item.checked .check-box { transform: none; }
 }
 /* ===== V16 TIERS END ===== */
 

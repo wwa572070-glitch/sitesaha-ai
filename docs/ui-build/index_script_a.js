@@ -891,33 +891,73 @@
       });
     }
 
+    /* ==================================================================
+       §5-3 案例对照卡（第 21 轮）
+       ------------------------------------------------------------------
+       左「✗ 错误做法」= 真实经过 + 真实致险因素
+       右「✓ 正确做法」= 真实防控要点（+ 结果）
+
+       只用案例里已有的字段，不编造条文、数据或标准号。
+       图标 + 标签 + 文字共同表意，不单纯依赖红绿。
+       ================================================================== */
+    function caseCompare(item) {
+      var grid = make("div", "case-compare");
+
+      /* ---- 左：错误做法 ---- */
+      var wrong = make("section", "case-side is-wrong");
+      var wrongHead = make("div", "case-side-head");
+      wrongHead.appendChild(makeIcon("i-close", "ico ico-sm"));
+      wrongHead.appendChild(make("b", "", "错误做法"));
+      wrong.appendChild(wrongHead);
+
+      if (item.what_happened) {
+        wrong.appendChild(make("p", "case-side-body", item.what_happened));
+      }
+      if (item.why_dangerous) {
+        var why = make("div", "case-why");
+        why.appendChild(makeIcon("i-alert", "ico ico-sm"));
+        var whyText = make("span");
+        whyText.appendChild(make("b", "", "为什么危险："));
+        whyText.appendChild(document.createTextNode(item.why_dangerous));
+        why.appendChild(whyText);
+        wrong.appendChild(why);
+      }
+      grid.appendChild(wrong);
+
+      /* ---- 右：正确做法 ---- */
+      var right = make("section", "case-side is-right");
+      var rightHead = make("div", "case-side-head");
+      rightHead.appendChild(makeIcon("i-check", "ico ico-sm"));
+      rightHead.appendChild(make("b", "", "正确做法"));
+      right.appendChild(rightHead);
+
+      if (item.lesson) {
+        right.appendChild(make("p", "case-side-body", item.lesson));
+      } else {
+        /* 没有防控要点就不硬编 —— 如实说明 */
+        right.appendChild(make("p", "case-side-body is-empty",
+          "这条通报没有给出防控要点，请以现场安全交底和适用规范为准。"));
+      }
+      if (item.consequence) {
+        var outcome = make("div", "case-outcome");
+        outcome.appendChild(make("b", "", "结果："));
+        outcome.appendChild(document.createTextNode(item.consequence));
+        right.appendChild(outcome);
+      }
+      grid.appendChild(right);
+
+      return grid;
+    }
+
     function caseCard(item, compact) {
       var card = make("article", "case-card");
       card.dataset.category = item.category || "";
       card.appendChild(make("span", "case-tag", item.category || "未分类"));
       card.appendChild(make("h3", "", item.title || ""));
-      var pairs = [
-        ["事故 / 隐患经过", item.what_happened],
-        ["主要致险因素", item.why_dangerous],
-      ];
-      pairs.forEach(function (pair) {
-        if (!pair[1]) return;
-        var p = make("p");
-        p.appendChild(make("span", "case-label", pair[0] + "："));
-        p.appendChild(document.createTextNode(pair[1]));
-        card.appendChild(p);
-      });
+      card.appendChild(caseCompare(item));
       if (!compact) {
-        var detail = make("div", "case-detail");
-        if (item.consequence) {
-          var p1 = make("p");
-          p1.appendChild(make("span", "case-label", "后果与影响："));
-          p1.appendChild(document.createTextNode(item.consequence));
-          detail.appendChild(p1);
-        }
-        if (item.lesson) detail.appendChild(make("p", "case-lesson", "防控要点：" + item.lesson));
-        detail.appendChild(make("div", "case-source", "来源：" + (item.source_name || "未标注") + " · " + (item.date || "")));
-        card.appendChild(detail);
+        card.appendChild(make("div", "case-source",
+          "来源：" + (item.source_name || "未标注") + " · " + (item.date || "")));
       }
       return card;
     }
@@ -980,6 +1020,45 @@
       renderTrainingProgress();
     }
 
+    /* ==================================================================
+       §5-1 KPI 环形进度（第 21 轮）
+       ------------------------------------------------------------------
+       只用真实比例。没有测验记录时（best 为 null）显示 "--" 且不画环，
+       不编造百分比。
+
+       周长 = 2 * PI * 20 = 125.66，与 markup 里的 stroke-dasharray 一致。
+       ================================================================== */
+    var KPI_RING_LENGTH = 125.66;
+    var kpiRingShown = -1;
+
+    function updateKpiRing(best, total) {
+      var ring = $("kpiRing");
+      var fill = $("kpiRingFill");
+      var pctLabel = $("kpiRingPct");
+      if (!ring || !fill || !pctLabel) return;
+
+      if (best === null || best === undefined || !total) {
+        /* 没有有效分母 —— 不画环 */
+        if (kpiRingShown !== -1) {
+          fill.style.strokeDashoffset = String(KPI_RING_LENGTH);
+          pctLabel.textContent = "--";
+          ring.setAttribute("aria-label", "安全知识测验还没有记录");
+          kpiRingShown = -1;
+        }
+        return;
+      }
+
+      var percent = Math.max(0, Math.min(100, Math.round((best / total) * 100)));
+      /* 值没变就不重设，避免重复渲染闪烁 */
+      if (percent === kpiRingShown) return;
+      kpiRingShown = percent;
+
+      fill.style.strokeDashoffset = String(KPI_RING_LENGTH * (1 - percent / 100));
+      pctLabel.textContent = String(percent);
+      ring.setAttribute("aria-label",
+        "安全知识测验最佳成绩 " + best + " / " + total + "，正确率 " + percent + "%");
+    }
+
     function renderTrainingProgress() {
       var steps = (trainingData.training_steps || []).length || 5;      var done = readStore("sitesaha-steps-v1", {});
       var count = 0;
@@ -997,9 +1076,16 @@
       var kpiQuiz = $("kpiQuiz");
       if (kpiQuiz) {
         var quiz = readStore(QUIZ_KEY, EMPTY_QUIZ);
-        kpiQuiz.textContent = quiz.bestCorrect + "/" + (quiz.total || 20);
+        var quizTotal = quiz.total || 20;
+        var quizBest = quiz.bestCorrect || 0;
+        kpiQuiz.textContent = quizBest + "/" + quizTotal;
         var note = $("kpiQuizNote");
-        if (note) note.textContent = quiz.attempts ? ("已测 " + quiz.attempts + " 次 · 历史最佳") : "本地保存，仅自己可见";
+        if (note) {
+          note.textContent = quiz.attempts
+            ? ("已测 " + quiz.attempts + " 次 · 历史最佳")
+            : "还没有测验记录";
+        }
+        updateKpiRing(quiz.attempts ? quizBest : null, quizTotal);
       }
     }
 
